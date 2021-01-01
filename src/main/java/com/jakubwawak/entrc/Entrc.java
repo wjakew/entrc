@@ -5,6 +5,7 @@ all rights reserved
  */
 package com.jakubwawak.entrc;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 /**
@@ -13,7 +14,7 @@ import java.sql.SQLException;
  */
 public class Entrc {
     
-    public static void main(String[] args) throws SQLException{
+    public static void main(String[] args) throws SQLException, IOException{
 
 	Test t = new Test();
     }

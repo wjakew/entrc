@@ -591,7 +591,63 @@ public class Database_Connector {
             log("Failed to set exit event for user(id:"+worker_id+") ("+e.toString()+")");
             return -1;
         }
-
+    }
+    
+    
+    /**
+     * Function for preparing name for the photo
+     * @param worker_id
+     * @return Pair
+     * Function gathers last event name and name + surname combo
+     */
+    Pair<String,String> prepare_photo_name(int worker_id) throws SQLException{
+        
+        // getting last event name
+        String query = "SELECT * FROM USER_LOG where worker_id = ? ORDER BY user_log_id DESC LIMIT 1;";
+        PreparedStatement ppst = con.prepareStatement(query);
+        
+        ppst.setInt(1,worker_id);
+        
+        String evt_name,name,surname = null;
+        
+        try{
+            ResultSet rs = ppst.executeQuery();
+            
+            // getting event name to evt_name
+            if (rs.next()){
+                evt_name = rs.getString("user_log_action") +"-"+rs.getObject("user_log_date").toString().split(" ")[0];
+            }
+            else{
+                evt_name = null;
+            }
+            
+            query = "SELECT worker_name,worker_surname FROM WORKER where worker_id=?;";
+            ppst = con.prepareStatement(query);
+            
+            
+            ppst.setInt(1, worker_id);
+            
+            rs = ppst.executeQuery();
+            
+            // getting name and surname from WORKER table
+            if (rs.next()){
+                name = rs.getString("worker_name");
+                surname = rs.getString("worker_surname");
+            }
+            else{
+                name = null;
+                surname = null;
+            }
+            
+            if ( evt_name != null && name != null && surname != null){
+                return new Pair(evt_name, name+"-"+surname);
+            }
+            return null;
+        
+        }catch(SQLException e){
+            log("Failed to prepare photo name from database! ("+e.toString()+")");
+            return null;
+        }
     }
     
     /**
@@ -710,9 +766,7 @@ public class Database_Connector {
                     info_print("event set for NEW");
                     return new Pair(null,"NEW");
                 }
-                
             }
-
         }catch(SQLException e){
             log("Failed to gather last user (id:"+worker_id+") event ("+e.toString()+")");
             return null;

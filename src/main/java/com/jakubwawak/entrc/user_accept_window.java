@@ -5,11 +5,16 @@
  */
 package com.jakubwawak.entrc;
 
+import com.github.sarxos.webcam.Webcam;
 import com.mysql.cj.conf.ConnectionUrlParser.Pair;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -144,6 +149,8 @@ public class user_accept_window extends javax.swing.JDialog {
             } catch (SQLException ex) {
                 Logger.getLogger(user_accept_window.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } catch (IOException ex) {
+            Logger.getLogger(user_accept_window.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }//GEN-LAST:event_button_acceptActionPerformed
@@ -153,14 +160,19 @@ public class user_accept_window extends javax.swing.JDialog {
      * @return String
      * Returns absolute path to photo
      */
-    String take_picture(){
-        // here we need to change data
-        return "photo_src";
+    String take_picture() throws SQLException, IOException{
+        Webcam webcam = Webcam.getDefault();        // loading default webcam
+        webcam.open();                              // opening stream
+        
+        Pair<String,String> database_data = database.prepare_photo_name(database.get_worker_id_bypin(user.pin));
+        String photo_name = database_data.right + database_data.left+".png";    // preparing photo name
 
+        File photo_file = new File(photo_name);
+        ImageIO.write(webcam.getImage(), "PNG", photo_file);
+        
+        return photo_file.getAbsolutePath();
     }
-    
-    
-    
+
     /**
      * Function for loading window
      * @throws SQLException 
