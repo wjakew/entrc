@@ -73,7 +73,16 @@ public class Database_Connector {
         if(database_log.size() > 100){
             database_log.clear();
         }
+    }
     
+    /**
+     * Function for printing info data on the screen
+     * @param data 
+     */
+    void info_print(String data){
+        if ( debug == 1 ){
+            System.out.println(data);
+        }
     }
     /**
      * Function for connecting to the database
@@ -565,7 +574,7 @@ public class Database_Connector {
         String query = "INSERT INTO ENTRANCE_EXIT\n" +
                 "(worker_id,user_log_id,entrance_exit_time)\n" +
                 "VALUES\n" +
-                "(?,?,?,?);";
+                "(?,?,?);";
         try{
             PreparedStatement ppst = con.prepareStatement(query);
 
@@ -575,6 +584,7 @@ public class Database_Connector {
             
             ppst.execute();
 
+            update_entrance_event(worker_id,get_lastid_EXIT(worker_id));    // making pair with entrance
             return 1;
         
         }catch(SQLException e){
@@ -605,20 +615,22 @@ public class Database_Connector {
         String query = "SELECT entrance_time FROM ENTRANCE where worker_id = ? ORDER BY entrance_id DESC LIMIT 1;";
         
         PreparedStatement ppst = con.prepareStatement(query);
-        
+        info_print("Checking last user event for id:"+worker_id);
         try{
             ppst.setInt(1,worker_id);
             
             ResultSet rs = ppst.executeQuery();
             
             // now rs represents ENTRANCE
-            
+            info_print("entrance_time: using query("+ppst.toString()+")");
             if ( rs.next() ){
                 // we found last ENTRANCE record 
                 time_entrance = rs.getObject("entrance_time", LocalDateTime.class);
+                info_print("entrance_time found ("+time_entrance.toString()+")");
             }
             else{
                 time_entrance = null;
+                info_print("entrace_time is null");
             }
             
             query = "SELECT entrance_exit_time FROM ENTRANCE_EXIT where worker_id = ? ORDER BY entrance_exit_id DESC LIMIT 1;";
@@ -626,17 +638,20 @@ public class Database_Connector {
             ppst = con.prepareStatement(query);
             
             ppst.setInt(1,worker_id);
-            
+            info_print("exit_time: using query("+ppst.toString()+")");
             // now rs represents EXIT
             
             rs = ppst.executeQuery();
             
             if ( rs.next() ){
                 // we found last EXIT record
-                time_exit = rs.getObject("exit_time",LocalDateTime.class);
+                time_exit = rs.getObject("entrance_exit_time",LocalDateTime.class);
+                info_print("exit_time found ("+time_exit.toString()+")");
             }
             else{
                 time_exit = null;
+                info_print("exit_time is null");
+                
             }
             
             
@@ -670,24 +685,29 @@ public class Database_Connector {
                 // ENTRANCE + X
                 if ( time_entrance != null){
                     // -12 h after entrance ENTRANCE OK
-                    if (time_now.minusHours(17).isAfter(time_entrance)){
+                    LocalDateTime check_17 = time_now.minusHours(17);
+                    if (check_17.isBefore(time_entrance)){
+                        info_print("event set for: ENTR");
                         return new Pair(time_entrance,"ENTR");
                     }
                     // -12 h before entrance ENTRANCE FAIL
                     else{
                         log_INFO(worker_id,"No exit for entrance! Date: "+time_entrance.toString()+
                                 " user: "+get_worker_data(worker_id));// log entrance without exit
+                        info_print("event set for: ENTR_F");
                         return new Pair(time_entrance,"ENTR_F");
                     }
                 }
                 // X + EXIT
                 else if (time_exit != null){
                     log_INFO(worker_id,"Failed to get ENTRANCE data before");// log no entrance ( DATABASE FAIL )
+                    info_print("event set for EXIT_F");
                     return new Pair(time_exit,"EXIT_F");
                 }
                 // X + X
                 else{
                     // log first user login
+                    info_print("event set for NEW");
                     return new Pair(null,"NEW");
                 }
                 

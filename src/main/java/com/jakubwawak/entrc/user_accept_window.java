@@ -102,14 +102,30 @@ public class user_accept_window extends javax.swing.JDialog {
 
     private void button_acceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_acceptActionPerformed
         try{
-            if ( action_data.right.equals("ENTR") && action_data.right.equals("ENTR_F")){
-                if(database.set_exit_event(database.get_worker_id_bypin(user.pin), take_picture()) == 1){
+            if ( action_data.right.equals("ENTR") || action_data.right.equals("ENTR_F")){
+                int ret_code = database.set_exit_event(database.get_worker_id_bypin(user.pin), take_picture());
+                
+                switch(ret_code){
+                    case 1:
+                        dispose();
+                        break;
+                    case -1:
+                        new message_window(null,true,"Błąd bazy danych. Skontaktuj się z administratorem");
+                        break;
+                    default:
+                        new message_window(null,true,"Wystąpił nierozpoznany błąd. Skontaktuj się z administratorem");
+                        break;
+                }
+            }
+            else if ( action_data.right.equals("NEW") ){
+                if(database.set_entrance_event(database.get_worker_id_bypin(user.pin), take_picture())){
                     dispose();
                 }
                 else{
                     new message_window(null,true,"Błąd rejestracji. Skontaktuj się z administratorem");
                     dispose();
                 }
+                
             }
             else{
                 if(database.set_entrance_event(database.get_worker_id_bypin(user.pin), take_picture())){
@@ -138,7 +154,7 @@ public class user_accept_window extends javax.swing.JDialog {
      * Returns absolute path to photo
      */
     String take_picture(){
-           
+        // here we need to change data
         return "photo_src";
 
     }
@@ -157,7 +173,7 @@ public class user_accept_window extends javax.swing.JDialog {
         //loading data about last action
         action_data = database.get_last_user_event(database.get_worker_id_bypin(user.pin));
         
-        if ( action_data.right.equals("ENTR") && action_data.right.equals("ENTR_F")){
+        if ( action_data.right.equals("ENTR") || action_data.right.equals("ENTR_F")){
             label_action.setText("WYJŚCIE");
         }
         else{

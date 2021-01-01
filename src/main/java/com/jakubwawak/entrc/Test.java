@@ -7,7 +7,6 @@ package com.jakubwawak.entrc;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -23,14 +22,11 @@ public class Test {
     
     Test() throws SQLException{
         dc = new Database_Connector();        
-        
         dc.connect("localhost", "entrc_database", "root", "password");
-        //dc.log_LOGIN_ACCEPT("1111");
-        //System.out.println(dc.get_worker_id_bypin("1111"));
 
         new main_user_window(dc);
-        //dc.log_INFO(1, "Testuje dodawanie");
-        //show_arraylist(dc.database_log);
+
+
         
     }
     
