@@ -10,6 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.concurrent.ThreadLocalRandom;
 /**
  * Database object connector
  * @author jakubwawak
@@ -17,7 +18,7 @@ import java.time.ZoneId;
 public class Database_Connector {
     
     // version of database 
-    final String version = "vC.0.2";
+    final String version = "vC.0.3";
     // header for logging data
     // connection object for maintaing connection to the database
     Connection con;
@@ -859,6 +860,155 @@ public class Database_Connector {
         }catch(SQLException e){
             log("Failed to check credentials ("+e.toString());
             return -1;
+        }   
+    }
+    
+    /**
+     * Function for checking messages to user ( for showing in the logging screen )
+     * @param worker_id
+     * @return String
+     * @throws SQLException 
+     */
+    String check_message(int worker_id) throws SQLException{
+        String query = "SELECT user_message_content FROM USER_MESSAGE where worker_id = ? and user_message_seen = 0;";
+        PreparedStatement ppst = con.prepareStatement(query);
+        ppst.setInt(1, worker_id);
+        
+        try{
+            
+            ResultSet rs = ppst.executeQuery();
+            
+            if ( rs.next() ){
+                return rs.getString("user_message_content");
+            }
+            return null;
+        }
+        catch(SQLException e){
+            log("Failed to get message to user: "+e.toString());
+            return null;
+        }
+    }
+    
+    /**
+     * Function for updating message for worker ( setting it seen )
+     * @param worker_id
+     * @return
+     * @throws SQLException 
+     */
+    boolean set_message_seen(int worker_id) throws SQLException{
+        String query = "UPDATE USER_MESSAGE SET user_message_seen = 1 where worker_id = ?;";
+        
+        PreparedStatement ppst = con.prepareStatement(query);
+        
+        ppst.setInt(1,worker_id);
+        
+        try{
+            ppst.execute();
+            return true;
+        }catch(SQLException e){
+            log("Failed to set message seen ("+e.toString()+")");
+            return false;
+        }
+    }
+    
+    /**
+     * Function for getting all workers from database
+     * @return
+     * @throws SQLException 
+     */
+    ArrayList<String> get_all_workers() throws SQLException{
+        ArrayList<String> data_toRet = new ArrayList<>();
+        String query = "SELECT * from WORKER;";
+        
+        PreparedStatement ppst = con.prepareStatement(query);
+        
+        try{
+            ResultSet rs = ppst.executeQuery();
+            
+            
+            while ( rs.next() ){
+                if ( rs.getInt("worker_id") != 1 ){
+                    data_toRet.add(rs.getString("worker_name")+" "+rs.getString("worker_surname")+"(id:"
+                        +Integer.toString(rs.getInt("worker_id"))+":)");
+                }
+            }
+            
+            return data_toRet;
+        }catch(SQLException e){
+            log("Failed to gather all workers ("+e.toString()+")");
+            return null;
+        }
+    }
+    /**
+     * Function for generating random pin
+     * @return String
+     */
+    String random_pin_generator(){
+       
+       String data = "";
+       
+       for (int i = 0 ; i < 4 ; i++){
+           int new_int = ThreadLocalRandom.current().nextInt(0, 9);
+           
+           data = data + Integer.toString(new_int);
+       }
+       return data;
+   }
+    
+    /**
+     * Function for enrolling new pin for the user
+     * @return
+     * @throws SQLException 
+     */
+    String enroll_pin() throws SQLException{
+        String query = "SELECT worker_pin from WORKER";
+        ArrayList<String> pin_collection = new ArrayList<>();
+        
+        PreparedStatement ppst = con.prepareStatement(query);
+        
+        try{
+            
+            ResultSet rs = ppst.executeQuery();
+            
+            while( rs.next() ){
+                pin_collection.add(rs.getString("worker_pin"));
+            }
+            
+            String pin = "";
+            
+            while(pin_collection.contains(pin) || pin.equals("")){
+                pin = random_pin_generator();
+            }
+            
+            return pin;
+        }catch(SQLException e){
+            log("Failed to enroll pin ("+e.toString()+")");
+            return null;
+        }
+    }
+    
+    /**
+     * Function for reset pin for user
+     * @param worker_id
+     * @return String
+     * @throws SQLException 
+     */
+    String reset_pin(int worker_id) throws SQLException{
+        String new_pin = enroll_pin();
+        
+        String query = "UPDATE WORKER SET worker_pin = ? WHERE worker_id = ?;";
+        
+        PreparedStatement ppst = con.prepareStatement(query);
+        
+        ppst.setString(1,new_pin);
+        ppst.setInt(2,worker_id);
+        
+        try{
+            ppst.execute();
+            return new_pin;
+        }catch(SQLException e){
+            log("Failed to reset pin for user(id:"+worker_id+") ("+e.toString()+")");
+            return null;
         }
         
     }

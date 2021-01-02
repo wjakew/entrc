@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+by Jakub Wawak
+kubawawak@gmail.com
+all rights reserved
  */
 package com.jakubwawak.entrc;
 
@@ -9,7 +9,6 @@ import com.github.sarxos.webcam.Webcam;
 import com.mysql.cj.conf.ConnectionUrlParser.Pair;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
@@ -57,6 +56,8 @@ public class user_accept_window extends javax.swing.JDialog {
         label_action = new javax.swing.JLabel();
         label_namesurname = new javax.swing.JLabel();
         button_accept = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        textarea_message = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -74,6 +75,10 @@ public class user_accept_window extends javax.swing.JDialog {
             }
         });
 
+        textarea_message.setColumns(20);
+        textarea_message.setRows(5);
+        jScrollPane1.setViewportView(textarea_message);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -82,13 +87,15 @@ public class user_accept_window extends javax.swing.JDialog {
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(button_accept, javax.swing.GroupLayout.PREFERRED_SIZE, 570, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(35, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(label_action)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(label_namesurname, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(55, 55, 55))))
+                        .addGap(55, 55, 55))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(button_accept, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE))
+                        .addContainerGap(35, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -97,9 +104,11 @@ public class user_accept_window extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label_action)
                     .addComponent(label_namesurname, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(button_accept, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -161,16 +170,21 @@ public class user_accept_window extends javax.swing.JDialog {
      * Returns absolute path to photo
      */
     String take_picture() throws SQLException, IOException{
-        Webcam webcam = Webcam.getDefault();        // loading default webcam
-        webcam.open();                              // opening stream
-        
-        Pair<String,String> database_data = database.prepare_photo_name(database.get_worker_id_bypin(user.pin));
-        String photo_name = database_data.right + database_data.left+".png";    // preparing photo name
+        if( !System.getProperty("os.name").equals("Mac OS X")){
+            Webcam webcam = Webcam.getDefault();        // loading default webcam
+            webcam.open();                              // opening stream
 
-        File photo_file = new File(photo_name);
-        ImageIO.write(webcam.getImage(), "PNG", photo_file);
-        
-        return photo_file.getAbsolutePath();
+            Pair<String,String> database_data = database.prepare_photo_name(database.get_worker_id_bypin(user.pin));
+            String photo_name = database_data.right + database_data.left+".png";    // preparing photo name
+
+            File photo_file = new File(photo_name);
+            ImageIO.write(webcam.getImage(), "PNG", photo_file);
+
+            return photo_file.getAbsolutePath();
+        }
+        else{
+            return "webcam is not supported on the machine";
+        }
     }
 
     /**
@@ -179,12 +193,13 @@ public class user_accept_window extends javax.swing.JDialog {
      * 
      */
     void load_window() throws SQLException{
-        
+        textarea_message.setEditable(false);
         //loading name of the user
         label_namesurname.setText(database.get_worker_data(user.pin));
         //loading data about last action
         action_data = database.get_last_user_event(database.get_worker_id_bypin(user.pin));
         
+        // setting event name
         if ( action_data.right.equals("ENTR") || action_data.right.equals("ENTR_F")){
             label_action.setText("WYJŚCIE");
         }
@@ -192,11 +207,24 @@ public class user_accept_window extends javax.swing.JDialog {
             label_action.setText("WEJŚCIE");
         }
         
+        String message = database.check_message(database.get_worker_id_bypin(user.pin));
+        // getting message for user
+        if( message != null ){
+            textarea_message.setText(message);
+            textarea_message.setVisible(true);
+            database.set_message_seen(database.get_worker_id_bypin(user.pin));
+        }
+        else{
+            textarea_message.setVisible(false);
+        }
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton button_accept;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel label_action;
     private javax.swing.JLabel label_namesurname;
+    private javax.swing.JTextArea textarea_message;
     // End of variables declaration//GEN-END:variables
 }

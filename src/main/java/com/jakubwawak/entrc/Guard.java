@@ -5,7 +5,6 @@ all rights reserved
  */
 package com.jakubwawak.entrc;
 
-import java.sql.Date;
 import java.sql.SQLException;
 
 /**
@@ -46,7 +45,5 @@ public class Guard {
         else{
             accepted = -1;
         }
-
     }
-    
 }

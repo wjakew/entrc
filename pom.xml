@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.jakubwawak</groupId>
     <artifactId>entrc</artifactId>
-    <version>1.0.0B</version>
+    <version>1.0.0B1</version>
     <packaging>jar</packaging>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
