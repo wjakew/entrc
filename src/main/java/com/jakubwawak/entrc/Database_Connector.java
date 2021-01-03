@@ -23,6 +23,7 @@ public class Database_Connector {
     // connection object for maintaing connection to the database
     Connection con;
     
+    Configuration config;
     // variable for debug purposes
     final int debug = 1;
     
@@ -44,6 +45,7 @@ public class Database_Connector {
         database_name = "";
         database_user = "";
         database_password = "";
+        config = null;
         //log("Started! Database Connector initzialazed");
     }
     
@@ -218,6 +220,37 @@ public class Database_Connector {
         
         }catch(SQLException e){
             log("Failed to log LOGIN_FAILED ("+e.toString());
+            return -1;
+        }
+    }
+    
+    /**
+     * Function for logging event PIN_FORGOT
+     * @param worker_id
+     * @return
+     * @throws SQLException 
+     */
+    int log_PIN_FORGOT(int worker_id) throws SQLException{
+                LocalDateTime todayLocalDate = LocalDateTime.now( ZoneId.of( "Europe/Warsaw" ) );
+        String query = "INSERT INTO USER_LOG\n" +
+                       "(user_log_date,worker_id,user_log_action,user_log_desc,user_log_photo_src)\n" +
+                       "VALUES\n" +
+                       "(?,?,?,?,?);";
+        
+        PreparedStatement ppst = con.prepareStatement(query);
+        
+        try{
+            ppst.setObject(1, todayLocalDate);
+            ppst.setInt(2,worker_id);
+            ppst.setString(3, "PIN_FORGOT");
+            ppst.setString(4, "User (id:"+worker_id+") reset pin");
+            ppst.setString(5, "-");
+
+            log("Trying to add: "+ppst.toString());
+            ppst.execute();
+            return 1;
+
+        }catch(SQLException e){
             return -1;
         }
     }

@@ -103,6 +103,7 @@ public class reset_pin_window extends javax.swing.JDialog {
                     
                     button_resetpin.setText("NOWY PIN: "+new_pin);
                     combobox_userlist.setEnabled(false);
+                    database.log_PIN_FORGOT(worker_id);
                 }catch(NumberFormatException e){
                     new message_window(null,true,"Bład worker_id. Skontaktuj się z administratorem");
                     dispose();

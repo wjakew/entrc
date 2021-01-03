@@ -17,7 +17,7 @@ import java.util.Scanner;
  */
 public class Entrc {
     
-    final static String version = "v1.0.0B1";
+    final static String version = "v1.0.0B2";
     static Configuration run_configuration;
     static Database_Connector database;
     static Scanner user_handler;
@@ -27,12 +27,17 @@ public class Entrc {
 	create_banner();
         run_configuration = new Configuration("config.txt");
         user_handler = new Scanner(System.in);
-        
         if ( run_configuration.prepared ){
             database = new Database_Connector();
             database.connect(run_configuration.ip, run_configuration.database, run_configuration.databaseuser, run_configuration.databasepass);
             run_configuration.show_configuration();
-            new main_user_window(database);
+            if( database.connected ){
+                new main_user_window(database);
+            }
+            else{
+                System.out.println("Błąd połączenia z bazą danych. Skontaktuj się z administratorem");
+            }
+            
         }
         else{
             System.out.println("Brak pliku konfiguracyjnego!");
@@ -50,7 +55,15 @@ public class Entrc {
                 databasepassword = user_handler.nextLine();
                 
                 database.connect(ip, databasename, databaseuser,databasepassword);
-                new main_user_window(database);
+                if ( database.connected ){
+                    database.config = new Configuration();
+                    database.config.copy_configuration();
+                    new main_user_window(database);
+                }
+                else{
+                    System.out.println("Błąd połączenia z bazą danych. Skontaktuj się z administratorem");
+                }
+                
             }
             else{
                 System.out.println("Nastapilo wyjscie z programu");

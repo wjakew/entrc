@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -43,6 +44,24 @@ public class Configuration {
         System.out.println("\nWyszukiwanie konfiguracji w:");
         System.out.println(new java.io.File(".").getCanonicalPath());
         run();
+    }
+    // Constructor without arguments
+    Configuration() throws IOException{
+        file_src = "config.txt";
+        file_lines = new ArrayList<>();
+        System.out.println("\nZainicjalizowano bez sciezki");
+    }
+    
+    /**
+     * Function for coping new configuration file to the current app folder
+     */
+    void copy_configuration() throws IOException{
+        FileWriter writer = new FileWriter("config.txt");
+        writer.write("ip%"+ip+"\n");
+        writer.write("database%"+database+"\n");
+        writer.write("databaseuser%"+databaseuser+"\n");
+        writer.write("databasepass%"+databasepass+"\n");
+        writer.close();
     }
     
     
