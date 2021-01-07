@@ -56,25 +56,28 @@ public class Database_Connector {
     void log(String log) throws SQLException{
         java.util.Date actual_date = new java.util.Date();
         database_log.add("("+actual_date.toString()+")"+" - "+log);
-    
-        // load log to database
-        if ( debug == 1){
-            String query = "INSERT INTO PROGRAM_LOG (program_log_desc) VALUES (?); ";
-            
-            PreparedStatement ppst = con.prepareStatement(query);
-            
-            try{
-                
-                ppst.setString(1,log);
-                
-                ppst.execute();
-                
-            }catch(SQLException e){}
+        if ( con == null){
+            System.out.println("Bład bazy: con=null ("+log+")");
         }
+        else{
+            // load log to database
+            if ( debug == 1){
+                String query = "INSERT INTO PROGRAM_LOG (program_log_desc) VALUES (?); ";
 
-        // after 100 records dump to file
-        if(database_log.size() > 100){
-            database_log.clear();
+                PreparedStatement ppst = con.prepareStatement(query);
+
+                try{
+
+                    ppst.setString(1,log);
+
+                    ppst.execute();
+
+                }catch(SQLException e){}
+            }
+            // after 100 records dump to file
+            if(database_log.size() > 100){
+                database_log.clear();
+            }
         }
     }
     
@@ -109,7 +112,7 @@ public class Database_Connector {
             log("Connected succesfully");
         }catch(SQLException e){
             connected = false;
-            log("Failed to connect to database ("+e.toString()+")");
+            System.out.println("Failed to connect to database ("+e.toString()+")");
         }
         log("Database string: "+login_data);
     }
