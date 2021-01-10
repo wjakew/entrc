@@ -37,7 +37,8 @@ public class Database_Connector {
     /**
      * Constructor
      */
-    Database_Connector() throws SQLException{
+    Database_Connector() throws SQLException, ClassNotFoundException{
+        Class.forName("com.mysql.jdbc.Driver");
         con = null;
         database_log = new ArrayList<>();
         connected = false;
@@ -502,7 +503,7 @@ public class Database_Connector {
      * -2 - database error
      */
     int update_entrance_event(int worker_id,int exit_id) throws SQLException{
-        String query = "SELECT * from ENTRANCE WHERE worker_id = ? and entrance finished = 0 ORDER BY entrance_id DESC LIMIT 1;";
+        String query = "SELECT * from ENTRANCE WHERE worker_id = ? and entrance_finished = 0 ORDER BY entrance_id DESC LIMIT 1;";
         PreparedStatement ppst = con.prepareStatement(query);
         int entrance_id;
         

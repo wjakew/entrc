@@ -60,6 +60,11 @@ public class user_accept_window extends javax.swing.JDialog {
         textarea_message = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         label_action.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         label_action.setText("WEJSCIE/WYJSCIE");
@@ -163,6 +168,58 @@ public class user_accept_window extends javax.swing.JDialog {
         }
 
     }//GEN-LAST:event_button_acceptActionPerformed
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        if ( evt.getKeyCode() == 10 ){
+            try{
+                if ( action_data.right.equals("ENTR") || action_data.right.equals("ENTR_F")){
+                    int ret_code = database.set_exit_event(database.get_worker_id_bypin(user.pin), take_picture());
+
+                    switch(ret_code){
+                        case 1:
+                            dispose();
+                            break;
+                        case -1:
+                            new message_window(null,true,"Błąd bazy danych. Skontaktuj się z administratorem");
+                            break;
+                        default:
+                            new message_window(null,true,"Wystąpił nierozpoznany błąd. Skontaktuj się z administratorem");
+                            break;
+                    }
+                }
+                else if ( action_data.right.equals("NEW") ){
+                    if(database.set_entrance_event(database.get_worker_id_bypin(user.pin), take_picture())){
+                        dispose();
+                    }
+                    else{
+                        new message_window(null,true,"Błąd rejestracji. Skontaktuj się z administratorem");
+                        dispose();
+                    }
+
+                }
+                else{
+                    if(database.set_entrance_event(database.get_worker_id_bypin(user.pin), take_picture())){
+                        dispose();
+                    }
+                    else{
+                        new message_window(null,true,"Błąd rejestracji. Skontaktuj się z administratorem");
+                        dispose();
+                    }
+                }
+            }catch(SQLException e){
+                try {
+                    new message_window(null,true,"Błąd bazy danych. Skontaktuj się z administratorem");
+                    database.log("Failed to accept user action ("+e.toString()+")");
+                    dispose();
+                } catch (SQLException ex) {
+                    Logger.getLogger(user_accept_window.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(user_accept_window.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    }//GEN-LAST:event_formKeyPressed
     
     /**
      * Function for handle webcam feed

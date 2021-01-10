@@ -54,12 +54,22 @@ public class main_user_window extends javax.swing.JFrame {
         setTitle("ENTRC USER");
         setAlwaysOnTop(true);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         textfield_pin.setFont(new java.awt.Font("Dialog", 0, 48)); // NOI18N
         textfield_pin.setText("WPISZ PIN");
         textfield_pin.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 textfield_pinFocusGained(evt);
+            }
+        });
+        textfield_pin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                textfield_pinKeyPressed(evt);
             }
         });
 
@@ -313,6 +323,57 @@ public class main_user_window extends javax.swing.JFrame {
         button_submit.setText("Zatwierdz");
         textfield_pin.setText(textfield_pin.getText()+"0");
     }//GEN-LAST:event_button_0ActionPerformed
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        System.out.println("KEY TYPED: "+evt.getKeyCode());
+    }//GEN-LAST:event_formKeyPressed
+
+    private void textfield_pinKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textfield_pinKeyPressed
+        // enter on numpad pressed
+        if ( evt.getKeyCode() == 10 ){
+            String pin = textfield_pin.getText();
+
+            if ( pin.isBlank() || pin.isEmpty() ){
+                // textfield_pin is blank
+                button_submit.setText("Pusto");
+            }
+            else{
+                try{
+                    // textfield_pin is not blank
+                    if ( database.check_exitcode(pin) == 1){
+                        // program has to exit
+                        new message_window(this,true,"Program zostanie zamkniety");
+                        System.exit(0);
+                    }
+                    else if ( database.check_resetcode(pin) == 1){
+                        // pin reset invoked
+                        new reset_pin_window(this,true,database);
+                    }
+                    else{
+                        // here we know that user pin is entered
+                        Guard user = new Guard(textfield_pin.getText(),database);
+                        user.check_credentials();       // checking credentials
+
+                        if ( user.accepted == 1 ){
+                            //user accepted
+                            database.log_LOGIN_ACCEPT(pin);         // LOGIN_ACCEPT EVENT
+                            new user_accept_window(this,true,database,user);
+                            textfield_pin.setText("");
+                        }
+                        else{
+                            //user set wrong pin
+                            button_submit.setText("BŁĘDNY PIN");
+                            database.log_LOGIN_FAILED(pin);         // LOGIN_FAILED EVENT
+                            textfield_pin.setText("");
+                        }
+                    }                
+
+                }catch(SQLException e){
+                    new message_window(this,true,"Błąd akceptacji pin");
+                }
+            }
+        }
+    }//GEN-LAST:event_textfield_pinKeyPressed
 
 
 

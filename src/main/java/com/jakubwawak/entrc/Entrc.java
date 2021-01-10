@@ -17,12 +17,12 @@ import java.util.Scanner;
  */
 public class Entrc {
     
-    final static String version = "v1.0.0B3";
+    final static String version = "v1.0.0B5";
     static Configuration run_configuration;
     static Database_Connector database;
     static Scanner user_handler;
     
-    public static void main(String[] args) throws SQLException, IOException, FileNotFoundException, URISyntaxException{
+    public static void main(String[] args) throws SQLException, IOException, FileNotFoundException, URISyntaxException, ClassNotFoundException{
 
 	create_banner();
         database = new Database_Connector();

@@ -19,7 +19,7 @@ public class Test {
     Database_Connector dc;
     
     
-    Test() throws SQLException, IOException{
+    Test() throws SQLException, IOException, ClassNotFoundException{
         dc = new Database_Connector();        
         dc.connect("localhost", "entrc_database", "root", "password");
 
