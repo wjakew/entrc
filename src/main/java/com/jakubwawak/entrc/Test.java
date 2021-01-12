@@ -24,7 +24,8 @@ public class Test {
         dc.connect("localhost", "entrc_database", "root", "password");
 
         //new main_user_window(dc);
-        new reset_pin_window(null,true,dc);
+        //new reset_pin_window(null,true,dc);
+        
     }
     
    void show_arraylist(ArrayList<String> to_show){

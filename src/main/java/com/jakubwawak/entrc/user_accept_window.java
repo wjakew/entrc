@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 /**
- *
+ *Object for creating user accept window
  * @author jakubwawak
  */
 public class user_accept_window extends javax.swing.JDialog {
@@ -32,8 +32,8 @@ public class user_accept_window extends javax.swing.JDialog {
     
     public user_accept_window(java.awt.Frame parent, boolean modal,Database_Connector database,Guard user) throws SQLException {
         super(parent, modal);
-        
         this.database = database;
+        this.setAlwaysOnTop(true);
         this.user = user;
         photo_src = "";
         
@@ -228,9 +228,12 @@ public class user_accept_window extends javax.swing.JDialog {
      */
     String take_picture() throws SQLException, IOException{
         if( !System.getProperty("os.name").equals("Mac OS X")){
+            button_accept.setText("CZEKAJ...");
             Webcam webcam = Webcam.getDefault();        // loading default webcam
             webcam.open();                              // opening stream
-
+            
+            // changing button text during picture
+            
             Pair<String,String> database_data = database.prepare_photo_name(database.get_worker_id_bypin(user.pin));
             String photo_name = database_data.right + database_data.left+".png";    // preparing photo name
 
