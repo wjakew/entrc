@@ -18,7 +18,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Database_Connector {
     
     // version of database 
-    final String version = "vC.0.3";
+    final String version = "vC.0.4";
     // header for logging data
     // connection object for maintaing connection to the database
     Connection con;
@@ -57,6 +57,7 @@ public class Database_Connector {
     void log(String log) throws SQLException{
         java.util.Date actual_date = new java.util.Date();
         database_log.add("("+actual_date.toString()+")"+" - "+log);
+        System.out.println("ENTRC LOG: "+database_log.get(database_log.size()-1));
         if ( con == null){
             System.out.println("Bład bazy: con=null ("+log+")");
         }
@@ -105,7 +106,8 @@ public class Database_Connector {
         database_user = user;
         database_password = password;
         
-        String login_data = "jdbc:mysql://"+this.ip+"/"+database_name+"?" +
+        String login_data = "jdbc:mysql://"+this.ip+"/"+database_name+"?"
+                + "useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&" +
                                    "user="+database_user+"&password="+database_password;
         try{
             con = DriverManager.getConnection(login_data);
@@ -116,6 +118,34 @@ public class Database_Connector {
             System.out.println("Failed to connect to database ("+e.toString()+")");
         }
         log("Database string: "+login_data);
+    }
+    
+    /**
+     * Function for logging ERRORS to the database
+     * @param error
+     * @param error_code
+     * @return boolean
+     * @throws SQLException 
+     */
+    boolean log_ERROR(String error,String error_code) throws SQLException{
+        String query = "INSERT INTO ERROR_LOG \n"
+                + " (error_log_code,error_log_desc)\n"
+                + " VALUES"
+                + " (?,?);";
+        
+        try{
+            PreparedStatement ppst = con.prepareStatement(query);
+            ppst.setString(1, error_code);
+            ppst.setString(2,error);
+            
+            
+            ppst.execute();
+            return true;
+        
+        }catch(SQLException e){
+            System.out.println("Failed to log error ("+e.toString()+")");
+            return false;
+        }
     }
     
     /**
@@ -852,6 +882,29 @@ public class Database_Connector {
      */
     int check_resetcode(String code) throws SQLException{
         String query = "SELECT * FROM CONFIGURATION where entrc_user_ask_pin = ?";
+        PreparedStatement ppst = con.prepareStatement(query);
+        ppst.setString(1,code);       
+        try{
+            ResultSet rs = ppst.executeQuery();
+            
+            if ( rs.next() ){
+                return 1;
+            }
+            return 0;
+            
+        }catch(SQLException e){
+            log("Failed to check CONFIGURATION table ("+e.toString());
+            return -1;
+            }
+    }
+    /**
+     * Function for checking manage code for opening managment window
+     * @param code
+     * @return
+     * @throws SQLException 
+     */
+    int check_managecode(String code) throws SQLException{
+        String query = "SELECT * FROM CONFIGURATION where entrc_user_manage_pin = ?";
         PreparedStatement ppst = con.prepareStatement(query);
         ppst.setString(1,code);       
         try{

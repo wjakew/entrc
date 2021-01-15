@@ -6,7 +6,6 @@ all rights reserved
 package com.jakubwawak.entrc;
 
 import java.sql.SQLException;
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 
 /**
@@ -288,6 +287,12 @@ public class main_user_window extends javax.swing.JFrame {
                 else if ( database.check_resetcode(pin) == 1){
                     // pin reset invoked
                     new reset_pin_window(this,true,database);
+                    textfield_pin.setText("");
+                }
+                else if ( database.check_managecode(pin) == 1){
+                    // manage users window invoked
+                    new manage_workers_window(this,true,database);
+                    textfield_pin.setText("");
                 }
                 else{
                     // here we know that user pin is entered
