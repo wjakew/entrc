@@ -18,7 +18,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Database_Connector {
     
     // version of database 
-    final String version = "vC.0.4";
+    final String version = "vC.0.5";
     // header for logging data
     // connection object for maintaing connection to the database
     Connection con;
@@ -118,6 +118,42 @@ public class Database_Connector {
             System.out.println("Failed to connect to database ("+e.toString()+")");
         }
         log("Database string: "+login_data);
+    }
+    
+    /**
+     * Function to generate user login
+     * @return 
+     */
+    String login_generator(String name,String surname) throws SQLException{
+        int numbers[] = {1,2,3,4,5,6,7,8,9,10,11};
+        String login = "";
+        if ( surname.length() >=5 ){
+            login = surname.substring(0, 5);
+            login = login + name.charAt(0);
+        }
+        else{
+            int size = surname.length();
+            login = surname;
+            login = login + name.substring(0,5-size);
+        }
+        
+        String query = "SELECT worker_login FROM WORKER;";
+        
+        try{
+            PreparedStatement ppst = con.prepareStatement(query);
+            
+            ResultSet rs = ppst.executeQuery();
+            int i = 0;
+            while(rs.next()){
+                if ( rs.getString("worker_login").equals(login)){
+                    login = login + Integer.toString(numbers[i]);
+                }
+            }
+            return login;
+        }catch(SQLException e){
+            log("Failed to generate login ("+e.toString()+")");
+            return null;
+        }
     }
     
     /**

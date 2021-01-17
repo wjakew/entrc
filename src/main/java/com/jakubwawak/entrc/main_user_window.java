@@ -21,6 +21,7 @@ public class main_user_window extends javax.swing.JFrame {
     
     public main_user_window(Database_Connector database) {
         initComponents();
+        this.setTitle("ENTRC APP v1.0.0GM2");
         this.database = database;
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         setResizable(false);

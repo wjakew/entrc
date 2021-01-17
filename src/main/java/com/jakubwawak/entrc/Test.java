@@ -23,8 +23,7 @@ public class Test {
         dc = new Database_Connector();        
         dc.connect("localhost", "entrc_database", "root", "password");
 
-        //new main_user_window(dc);
-        //new reset_pin_window(null,true,dc);
+        new manage_workers_window(null,true,dc);
         
     }
     

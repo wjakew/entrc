@@ -105,9 +105,11 @@ public class reset_pin_window extends javax.swing.JDialog {
                     combobox_userlist.setEnabled(false);
                     database.log_PIN_FORGOT(worker_id);
                 }catch(NumberFormatException e){
+                    new message_window_jdialog(this,true,"Błąd: "+e.toString());
                     new message_window(null,true,"Bład worker_id. Skontaktuj się z administratorem");
                     dispose();
                 } catch (SQLException ex) {
+                    new message_window_jdialog(this,true,"Błąd: "+ex.toString());
                     new message_window(null,true,"Błąd bazy danych. Skontaktuj sie z administratorem");
                     dispose();
                 }

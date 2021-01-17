@@ -1,0 +1,2 @@
+Jan,Kowalski,Kierowca,1111
+Pawe³,Nowak,Kierownik Zmiany,2222

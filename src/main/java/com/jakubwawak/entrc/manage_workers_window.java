@@ -1,18 +1,22 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+by Jakub Wawak
+kubawawak@gmail.com
+all rights reserved
  */
 package com.jakubwawak.entrc;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileSystemView;
 
 /**
- *
+ *Object for creating managment window
  * @author kubaw
  */
 public class manage_workers_window extends javax.swing.JDialog {
@@ -27,6 +31,7 @@ public class manage_workers_window extends javax.swing.JDialog {
         this.database = database;
         list_selected = "";
         initComponents();
+        this.setLocationRelativeTo(null);
         load_window();
         setVisible(true);
     }
@@ -48,6 +53,7 @@ public class manage_workers_window extends javax.swing.JDialog {
         button_editworker = new javax.swing.JButton();
         button_export = new javax.swing.JButton();
         button_import = new javax.swing.JButton();
+        button_exportPIN = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -87,8 +93,25 @@ public class manage_workers_window extends javax.swing.JDialog {
         });
 
         button_export.setText("Eksportuj do pliku");
+        button_export.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_exportActionPerformed(evt);
+            }
+        });
 
         button_import.setText("Importuj z pliku");
+        button_import.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_importActionPerformed(evt);
+            }
+        });
+
+        button_exportPIN.setText("Eksportuj dane PIN");
+        button_exportPIN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_exportPINActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -98,17 +121,18 @@ public class manage_workers_window extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(56, 56, 56)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(50, 50, 50)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(button_editworker, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(button_addworker, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(button_deleteworker, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(button_export, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(button_import, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(105, 105, 105)
                         .addComponent(jLabel1)))
+                .addGap(50, 50, 50)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(button_addworker, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(button_editworker, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(button_deleteworker, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(button_export, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(button_import, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(button_exportPIN, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 53, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -116,7 +140,12 @@ public class manage_workers_window extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(79, 79, 79)
+                        .addGap(49, 49, 49)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
                         .addComponent(button_addworker, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(button_editworker, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -125,13 +154,10 @@ public class manage_workers_window extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addComponent(button_export, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(button_import, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(75, Short.MAX_VALUE))
+                        .addComponent(button_import, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(button_exportPIN, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(56, Short.MAX_VALUE))
         );
 
         pack();
@@ -142,6 +168,7 @@ public class manage_workers_window extends javax.swing.JDialog {
             new addworker_window(this,true,database,0);
             reload_list();
         } catch (SQLException ex) {
+            new message_window_jdialog(this,true,"Błąd: "+ex.toString());
             Logger.getLogger(manage_workers_window.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -164,9 +191,11 @@ public class manage_workers_window extends javax.swing.JDialog {
                 try {
                     reload_list();
                 } catch (SQLException ex) {
+                    new message_window_jdialog(this,true,"Błąd: "+ex.toString());
                     Logger.getLogger(manage_workers_window.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } catch (SQLException ex) {
+                new message_window_jdialog(this,true,"Błąd: "+ex.toString());
                 Logger.getLogger(manage_workers_window.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -175,6 +204,63 @@ public class manage_workers_window extends javax.swing.JDialog {
     private void button_deleteworkerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_deleteworkerActionPerformed
         new message_window_jdialog(this,true,"Funkcja nieobsługiwana");
     }//GEN-LAST:event_button_deleteworkerActionPerformed
+
+    private void button_exportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_exportActionPerformed
+        String path = "worker_list"+get_hours()+".txt";
+        Database_Data_Dump ddd = new Database_Data_Dump(database);
+        try {
+            Data_Worker_Connector dc = new Data_Worker_Connector(path,0);
+            dc.write_file(ddd.dump_worker_data());
+            new message_window_jdialog(this,true,"Zapisano do pliku");
+        } catch (IOException ex) {
+            Logger.getLogger(manage_workers_window.class.getName()).log(Level.SEVERE, null, ex);
+            new message_window_jdialog(this,true,"Błąd: "+ex.toString());
+        } catch (SQLException ex) {
+            Logger.getLogger(manage_workers_window.class.getName()).log(Level.SEVERE, null, ex);
+            new message_window_jdialog(this,true,"Błąd: "+ex.toString());
+        }
+
+    }//GEN-LAST:event_button_exportActionPerformed
+
+    private void button_exportPINActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_exportPINActionPerformed
+        Database_Data_Dump ddd = new Database_Data_Dump(database);
+        try {
+            Data_Worker_Connector dwc = new Data_Worker_Connector("worker_pin_dump.txt",0);
+            dwc.write_file(ddd.dump_worker_data());
+            new message_window_jdialog(this,true,"Dane zaimportowno");
+        } catch (IOException ex) {
+            Logger.getLogger(manage_workers_window.class.getName()).log(Level.SEVERE, null, ex);
+            new message_window_jdialog(this,true,"Błąd: "+ex.toString());
+        } catch (SQLException ex) {
+            Logger.getLogger(manage_workers_window.class.getName()).log(Level.SEVERE, null, ex);
+            new message_window_jdialog(this,true,"Błąd: "+ex.toString());
+        }
+        
+    }//GEN-LAST:event_button_exportPINActionPerformed
+
+    private void button_importActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_importActionPerformed
+        JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+        if ( jfc.showOpenDialog(null) != JFileChooser.APPROVE_OPTION){
+            new message_window_jdialog(this,true,"Nie dokonano wyboru");
+        }
+        else{
+            // opened file
+            String path_file = jfc.getSelectedFile().getAbsolutePath();
+            try {
+                Data_Worker_Connector dwc = new Data_Worker_Connector(path_file,1);
+                if ( dwc.exists ){
+                    Database_Data_Import ddi = new Database_Data_Import(database);
+                    ddi.import_workers(dwc);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(manage_workers_window.class.getName()).log(Level.SEVERE, null, ex);
+                new message_window_jdialog(this,true,"Błąd: "+ex.toString());
+            } catch (SQLException ex) {
+                Logger.getLogger(manage_workers_window.class.getName()).log(Level.SEVERE, null, ex);
+                new message_window_jdialog(this,true,"Błąd: "+ex.toString());
+            }
+        }
+    }//GEN-LAST:event_button_importActionPerformed
     /**
      * Function for reloading list of users
      * @throws SQLException 
@@ -192,6 +278,24 @@ public class manage_workers_window extends javax.swing.JDialog {
      */
     void load_window() throws SQLException{
         reload_list();
+    }     
+    /**
+     * Function for getting hours
+     * @return String
+     */
+    String get_hours(){
+        Date actual_date = new Date();
+        String[] elements = actual_date.toString().split(" ");
+        String data_toRet = "";
+        for (int i = 0; i < elements[3].length(); i++) {
+            if( elements[3].charAt(i) == ':' ){
+                data_toRet = data_toRet + String.valueOf("");
+            }
+            else{
+                data_toRet = data_toRet + String.valueOf(elements[3].charAt(i));
+            }
+        }
+        return data_toRet;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -199,6 +303,7 @@ public class manage_workers_window extends javax.swing.JDialog {
     private javax.swing.JButton button_deleteworker;
     private javax.swing.JButton button_editworker;
     private javax.swing.JButton button_export;
+    private javax.swing.JButton button_exportPIN;
     private javax.swing.JButton button_import;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;

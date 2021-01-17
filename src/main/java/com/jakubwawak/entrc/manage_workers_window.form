@@ -28,19 +28,20 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
                       <Component id="jScrollPane1" min="-2" pref="195" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="button_editworker" min="-2" pref="257" max="-2" attributes="0"/>
-                          <Component id="button_addworker" min="-2" pref="257" max="-2" attributes="0"/>
-                          <Component id="button_deleteworker" min="-2" pref="257" max="-2" attributes="0"/>
-                          <Component id="button_export" min="-2" pref="257" max="-2" attributes="0"/>
-                          <Component id="button_import" min="-2" pref="257" max="-2" attributes="0"/>
-                      </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="105" max="-2" attributes="0"/>
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   </Group>
+              </Group>
+              <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="button_addworker" min="-2" pref="257" max="-2" attributes="0"/>
+                  <Component id="button_editworker" min="-2" pref="257" max="-2" attributes="0"/>
+                  <Component id="button_deleteworker" min="-2" pref="257" max="-2" attributes="0"/>
+                  <Component id="button_export" min="-2" pref="257" max="-2" attributes="0"/>
+                  <Component id="button_import" min="-2" pref="257" max="-2" attributes="0"/>
+                  <Component id="button_exportPIN" min="-2" pref="257" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="0" pref="53" max="32767" attributes="0"/>
           </Group>
@@ -48,10 +49,16 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="79" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
+                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jScrollPane1" min="-2" pref="319" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="button_addworker" min="-2" pref="42" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="button_editworker" min="-2" pref="42" max="-2" attributes="0"/>
@@ -61,15 +68,11 @@
                       <Component id="button_export" min="-2" pref="42" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="button_import" min="-2" pref="42" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
-                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" min="-2" pref="300" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="button_exportPIN" min="-2" pref="42" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="75" max="32767" attributes="0"/>
+              <EmptySpace pref="56" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -136,11 +139,25 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Eksportuj do pliku"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="button_exportActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="button_import">
       <Properties>
         <Property name="text" type="java.lang.String" value="Importuj z pliku"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="button_importActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="button_exportPIN">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Eksportuj dane PIN"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="button_exportPINActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

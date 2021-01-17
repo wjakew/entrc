@@ -17,13 +17,20 @@ import java.util.Scanner;
  */
 public class Entrc {
     
-    final static String version = "v1.0.0GM";
+    final static String version = "v1.0.0GM2";
     static Configuration run_configuration;
     static Database_Connector database;
     static Scanner user_handler;
+    static int debug = 0;
     
     public static void main(String[] args) throws SQLException, IOException, FileNotFoundException, URISyntaxException, ClassNotFoundException{
 
+        // debug mode
+        if (debug == 1){
+            new Test();
+            System.exit(0);
+        }
+        
 	create_banner();
         database = new Database_Connector();
         run_configuration = new Configuration("config.txt");
@@ -47,17 +54,20 @@ public class Entrc {
                     String ip,databasename,databaseuser,databasepassword;
                     System.out.print("ip:");
                     ip = user_handler.nextLine();
+                    run_configuration.ip = ip;
                     System.out.print("database name:");
                     databasename = user_handler.nextLine();   
+                    run_configuration.database = databasename;
                     System.out.print("user:");
                     databaseuser = user_handler.nextLine();
+                    run_configuration.databaseuser = databaseuser;
                     System.out.print("password:");
                     databasepassword = user_handler.nextLine();
-
+                    run_configuration.databasepass = databasepassword;
                     database.connect(ip, databasename, databaseuser,databasepassword);
 
                     if ( database.connected ){
-                        database.config = new Configuration();
+                        database.config = run_configuration;
                         database.config.copy_configuration();
                         new main_user_window(database);
                     }
@@ -86,7 +96,7 @@ public class Entrc {
                         "|  _| |  \\| | | | | |_) | |    \n" +
                         "| |___| |\\  | | | |  _ <| |___ \n" +
                         "|_____|_| \\_| |_| |_| \\_\\\\____|";
-        String addons = "VERSION: "+version + "   Jakub Wawak";
+        String addons = "VERSION: "+version + "   Jakub Wawak\n";
         
         System.out.println(banner);
         System.out.print(addons);

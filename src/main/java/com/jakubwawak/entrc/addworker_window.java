@@ -56,6 +56,7 @@ public class addworker_window extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Dodaj pracownika");
+        setIconImage(null);
 
         jLabel1.setText("imię");
 
@@ -150,6 +151,7 @@ public class addworker_window extends javax.swing.JDialog {
                         button_editpin.setText("Błąd");
                     }
                 } catch (SQLException ex) {
+                    new message_window_jdialog(this,true,"Błąd: "+ex.toString());
                     Logger.getLogger(addworker_window.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -158,6 +160,7 @@ public class addworker_window extends javax.swing.JDialog {
                 try {
                     field_pin.setText(dw.enroll_pin());
                 } catch (SQLException ex) {
+                    new message_window_jdialog(this,true,"Błąd: "+ex.toString());
                     Logger.getLogger(addworker_window.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 button_editpin.setText("Edytuj PIN");
@@ -178,6 +181,7 @@ public class addworker_window extends javax.swing.JDialog {
                     this.setTitle("Możesz zamknąć okno");
                 }
             } catch (SQLException ex) {
+                new message_window_jdialog(this,true,"Błąd: "+ex.toString());
                 Logger.getLogger(addworker_window.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -192,6 +196,7 @@ public class addworker_window extends javax.swing.JDialog {
                     this.setTitle("Możesz zamknąć okno");
                 }
             } catch (SQLException ex) {
+                new message_window_jdialog(this,true,"Błąd: "+ex.toString());
                 Logger.getLogger(addworker_window.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

@@ -9,8 +9,12 @@ import com.github.sarxos.webcam.Webcam;
 import com.mysql.cj.conf.ConnectionUrlParser.Pair;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -24,7 +28,6 @@ public class user_accept_window extends javax.swing.JDialog {
     /**
      * Creates new form user_accept_window
      */
-    
     Database_Connector database;
     Guard user;
     String photo_src;
@@ -161,9 +164,11 @@ public class user_accept_window extends javax.swing.JDialog {
                 database.log("Failed to accept user action ("+e.toString()+")");
                 dispose();
             } catch (SQLException ex) {
+                new message_window_jdialog(this,true,"Błąd: "+ex.toString());
                 Logger.getLogger(user_accept_window.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (IOException ex) {
+            new message_window_jdialog(this,true,"Błąd: "+ex.toString());
             Logger.getLogger(user_accept_window.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -212,9 +217,11 @@ public class user_accept_window extends javax.swing.JDialog {
                     database.log("Failed to accept user action ("+e.toString()+")");
                     dispose();
                 } catch (SQLException ex) {
+                    new message_window_jdialog(this,true,"Błąd: "+ex.toString());
                     Logger.getLogger(user_accept_window.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } catch (IOException ex) {
+                new message_window_jdialog(this,true,"Błąd: "+ex.toString());
                 Logger.getLogger(user_accept_window.class.getName()).log(Level.SEVERE, null, ex);
             }
 
@@ -229,22 +236,64 @@ public class user_accept_window extends javax.swing.JDialog {
     String take_picture() throws SQLException, IOException{
         if( !System.getProperty("os.name").equals("Mac OS X")){
             button_accept.setText("CZEKAJ...");
-            Webcam webcam = Webcam.getDefault();        // loading default webcam
-            webcam.open();                              // opening stream
-            
-            // changing button text during picture
-            
-            Pair<String,String> database_data = database.prepare_photo_name(database.get_worker_id_bypin(user.pin));
-            String photo_name = database_data.right + database_data.left+".png";    // preparing photo name
+            try{
+                Webcam webcam = Webcam.getDefault();        // loading default webcam
+                webcam.open();                              // opening stream
 
-            File photo_file = new File(photo_name);
-            ImageIO.write(webcam.getImage(), "PNG", photo_file);
+                // changing button text during picture
 
-            return photo_file.getAbsolutePath();
+                Pair<String,String> database_data = database.prepare_photo_name(database.get_worker_id_bypin(user.pin));
+                String photo_name = database_data.right + database_data.left+get_hours()+".png";    // preparing photo name
+
+                File photo_file = new File(create_path_name()+photo_name);
+                ImageIO.write(webcam.getImage(), "PNG", photo_file);
+
+                return photo_file.getAbsolutePath();
+            
+            }catch(Exception e){
+                new message_window_jdialog(this, true,"Sprawdz połączenie z kamerą");
+                database.log("Failed to reach camera ("+e.toString()+")");
+                return "webcam is not supported on the machine";
+            }
+            
         }
         else{
             return "webcam is not supported on the machine";
         }
+    }
+    
+    /**
+     * Function for creating path name 
+     * @return String
+     */
+    String create_path_name(){
+        Date actual_date = new Date();
+        String[] elements = actual_date.toString().split(" ");
+        String name = "photos-"+elements[2]+"-"+elements[1]+"-"+elements[5];
+        Path path = Paths.get(name);
+        if ( !Files.exists(path)){
+              File dir = new File(name+"\\");
+              dir.mkdirs();
+        }
+        return name+"\\";
+    }
+    /**
+     * Function for getting hours
+     * @return String
+     */
+    String get_hours(){
+        Date actual_date = new Date();
+        String[] elements = actual_date.toString().split(" ");
+        String data_toRet = "";
+        for (int i = 0; i < elements[3].length(); i++) {
+            if( elements[3].charAt(i) == ':' ){
+                data_toRet = data_toRet + String.valueOf("");
+            }
+            else{
+                data_toRet = data_toRet + String.valueOf(elements[3].charAt(i));
+            }
+        }
+        return data_toRet;
     }
 
     /**
