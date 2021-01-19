@@ -18,7 +18,7 @@ import java.util.Arrays;
  *Objet for managing files with worker data
  * @author kubaw
  */
-public class Data_Worker_Connector {
+public final class Data_Worker_Connector {
     /**
      * File pattern:
      * 
@@ -104,7 +104,7 @@ public class Data_Worker_Connector {
      * @return ArrayList
      */
     ArrayList<String> load_data(String line){
-        return new ArrayList<String>(Arrays.asList(line.split(",")));
+        return new ArrayList<>(Arrays.asList(line.split(",")));
     }
     
     /**

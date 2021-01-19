@@ -23,7 +23,7 @@ import java.util.ArrayList;
  * databaseuser%
  * databasepass%
  */
-public class Configuration {
+public final class Configuration {
     
     String file_src = "";
     File configuration_file;
@@ -56,12 +56,14 @@ public class Configuration {
      * Function for coping new configuration file to the current app folder
      */
     void copy_configuration() throws IOException{
-        FileWriter writer = new FileWriter("config.txt");
-        writer.write("ip%"+ip+"\n");
-        writer.write("database%"+database+"\n");
-        writer.write("databaseuser%"+databaseuser+"\n");
-        writer.write("databasepass%"+databasepass+"\n");
-        writer.close();
+        try (FileWriter writer = new FileWriter("config.txt")) {
+            writer.write("ip%"+ip+"\n");
+            writer.write("database%"+database+"\n");
+            writer.write("databaseuser%"+databaseuser+"\n");
+            writer.write("databasepass%"+databasepass+"\n");
+        }catch(Exception e){
+            System.out.println("ERROR LOG: "+e.toString());
+        }
     }
     
     
@@ -100,9 +102,9 @@ public class Configuration {
      */
     void show_file(){
         System.out.println("Showing raw file:");
-        for(String line: file_lines){
+        file_lines.forEach(line -> {
             System.out.println(line);
-        }
+        });
     }
     
     /**
@@ -122,10 +124,7 @@ public class Configuration {
      * @return boolean
      */
     boolean validate(){
-        if ( file_lines.size() >= 4){
-            return true;
-        }
-        return false;
+        return file_lines.size() >= 4;
     }
     
     /**

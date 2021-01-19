@@ -17,7 +17,7 @@ import java.util.Scanner;
  */
 public class Entrc {
     
-    final static String version = "v1.0.0GM2";
+    final static String version = "v1.0.0";
     static Configuration run_configuration;
     static Database_Connector database;
     static Scanner user_handler;
@@ -96,7 +96,7 @@ public class Entrc {
                         "|  _| |  \\| | | | | |_) | |    \n" +
                         "| |___| |\\  | | | |  _ <| |___ \n" +
                         "|_____|_| \\_| |_| |_| \\_\\\\____|";
-        String addons = "VERSION: "+version + "   Jakub Wawak\n";
+        String addons = " VERSION: "+version + "   Jakub Wawak\n";
         
         System.out.println(banner);
         System.out.print(addons);

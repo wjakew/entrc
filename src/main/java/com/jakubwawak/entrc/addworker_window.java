@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  *Object for adding worker
  * @author jakubwawak
  */
-public class addworker_window extends javax.swing.JDialog {
+public final class addworker_window extends javax.swing.JDialog {
 
     /**
      * Creates new form addworker_window
@@ -137,33 +137,35 @@ public class addworker_window extends javax.swing.JDialog {
 
     private void button_editpinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_editpinActionPerformed
         if (mode == 0){    
-            if ( button_editpin.getText().equals("Edytuj PIN") ){
-                field_pin.setEnabled(true);
-                button_editpin.setText("Sprawdź");
-            }
-            else if (button_editpin.getText().equals("Sprawdź")){
-                try {
-                    if ( dw.get_worker_id_bypin(field_pin.getText()) == 0){
-                        field_pin.setEnabled(false);
-                        button_editpin.setText("Zapisano");
+            switch (button_editpin.getText()) {
+                case "Edytuj PIN":
+                    field_pin.setEnabled(true);
+                    button_editpin.setText("Sprawdź");
+                    break;
+                case "Sprawdź":
+                    try {
+                        if ( dw.get_worker_id_bypin(field_pin.getText()) == 0){
+                            field_pin.setEnabled(false);
+                            button_editpin.setText("Zapisano");
                         }
-                    else{
-                        button_editpin.setText("Błąd");
-                    }
-                } catch (SQLException ex) {
-                    new message_window_jdialog(this,true,"Błąd: "+ex.toString());
-                    Logger.getLogger(addworker_window.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            else if (button_editpin.getText().equals("Błąd")){
-                field_pin.setEnabled(false);
-                try {
-                    field_pin.setText(dw.enroll_pin());
-                } catch (SQLException ex) {
-                    new message_window_jdialog(this,true,"Błąd: "+ex.toString());
-                    Logger.getLogger(addworker_window.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                button_editpin.setText("Edytuj PIN");
+                        else{
+                            button_editpin.setText("Błąd");
+                        }
+                    } catch (SQLException ex) {
+                        new message_window_jdialog(this,true,"Błąd: "+ex.toString());
+                        Logger.getLogger(addworker_window.class.getName()).log(Level.SEVERE, null, ex);
+                    }   break;
+                case "Błąd":
+                    field_pin.setEnabled(false);
+                    try {
+                        field_pin.setText(dw.enroll_pin());
+                    } catch (SQLException ex) {
+                        new message_window_jdialog(this,true,"Błąd: "+ex.toString());
+                        Logger.getLogger(addworker_window.class.getName()).log(Level.SEVERE, null, ex);
+                    }   button_editpin.setText("Edytuj PIN");
+                    break;
+                default:
+                    break;
             }
         }
     }//GEN-LAST:event_button_editpinActionPerformed

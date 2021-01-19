@@ -13,7 +13,7 @@ import javax.swing.DefaultComboBoxModel;
  *Object that creates reset window
  * @author jakubwawak
  */
-public class reset_pin_window extends javax.swing.JDialog {
+public final class reset_pin_window extends javax.swing.JDialog {
 
     /**
      * Creates new form reset_pin_window

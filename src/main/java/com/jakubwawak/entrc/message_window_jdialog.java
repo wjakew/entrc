@@ -13,6 +13,9 @@ public class message_window_jdialog extends javax.swing.JDialog {
 
     /**
      * Creates new form message_window
+     * @param parent
+     * @param modal
+     * @param message
      */
     public message_window_jdialog(javax.swing.JDialog parent, boolean modal,String message) {
         super(parent, modal);

@@ -7,6 +7,7 @@ package com.jakubwawak.entrc;
 
 import com.github.sarxos.webcam.Webcam;
 import com.mysql.cj.conf.ConnectionUrlParser.Pair;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,7 +24,7 @@ import javax.imageio.ImageIO;
  *Object for creating user accept window
  * @author jakubwawak
  */
-public class user_accept_window extends javax.swing.JDialog {
+public final class user_accept_window extends javax.swing.JDialog {
 
     /**
      * Creates new form user_accept_window
@@ -175,6 +176,15 @@ public class user_accept_window extends javax.swing.JDialog {
     }//GEN-LAST:event_button_acceptActionPerformed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        key_eventer(evt);
+    }//GEN-LAST:event_formKeyPressed
+    
+    /**
+     * Function for key press checking
+     * @param evt 
+     */
+    void key_eventer(KeyEvent evt){
+        System.out.println("Key code pressed: ");
         if ( evt.getKeyCode() == 10 ){
             try{
                 if ( action_data.right.equals("ENTR") || action_data.right.equals("ENTR_F")){
@@ -224,10 +234,8 @@ public class user_accept_window extends javax.swing.JDialog {
                 new message_window_jdialog(this,true,"Błąd: "+ex.toString());
                 Logger.getLogger(user_accept_window.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         }
-    }//GEN-LAST:event_formKeyPressed
-    
+    }
     /**
      * Function for handle webcam feed
      * @return String

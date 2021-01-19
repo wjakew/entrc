@@ -38,7 +38,6 @@ public class Database_Connector {
      * Constructor
      */
     Database_Connector() throws SQLException, ClassNotFoundException{
-        Class.forName("com.mysql.jdbc.Driver");
         con = null;
         database_log = new ArrayList<>();
         connected = false;

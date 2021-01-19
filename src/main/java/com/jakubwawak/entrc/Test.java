@@ -29,8 +29,8 @@ public class Test {
     
    void show_arraylist(ArrayList<String> to_show){
        System.out.println("Showing: "+to_show);
-       for(String line : to_show){
+       to_show.forEach(line -> {
            System.out.println(line);
-       }
+        });
     }
 }

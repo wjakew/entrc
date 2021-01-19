@@ -9,7 +9,7 @@ package com.jakubwawak.entrc;
  *Object for creating error window
  * @author kubaw
  */
-public class error_window extends javax.swing.JDialog {
+public final class error_window extends javax.swing.JDialog {
 
     /**
      * Creates new form error_window
