@@ -5,6 +5,7 @@ all rights reserved
  */
 package com.jakubwawak.entrc;
 
+import java.awt.Color;
 import java.sql.SQLException;
 import javax.swing.JFrame;
 
@@ -21,10 +22,11 @@ public class main_user_window extends javax.swing.JFrame {
     
     public main_user_window(Database_Connector database) {
         initComponents();
-        this.setTitle("ENTRC APP v1.0.0");
+        this.setTitle("ENTRC APP v1.0.1");
         this.database = database;
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         setResizable(false);
+        getContentPane().setBackground(Color.BLACK);
         setVisible(true);
     }
 
@@ -53,6 +55,7 @@ public class main_user_window extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ENTRC USER");
         setAlwaysOnTop(true);
+        setBackground(new java.awt.Color(0, 0, 0));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -60,7 +63,9 @@ public class main_user_window extends javax.swing.JFrame {
             }
         });
 
+        textfield_pin.setBackground(new java.awt.Color(0, 0, 0));
         textfield_pin.setFont(new java.awt.Font("Dialog", 0, 48)); // NOI18N
+        textfield_pin.setForeground(new java.awt.Color(255, 255, 255));
         textfield_pin.setText("WPISZ PIN");
         textfield_pin.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -73,7 +78,9 @@ public class main_user_window extends javax.swing.JFrame {
             }
         });
 
+        button_1.setBackground(new java.awt.Color(0, 102, 102));
         button_1.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        button_1.setForeground(new java.awt.Color(255, 255, 255));
         button_1.setText("1");
         button_1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -81,7 +88,9 @@ public class main_user_window extends javax.swing.JFrame {
             }
         });
 
+        button_submit.setBackground(new java.awt.Color(0, 51, 51));
         button_submit.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        button_submit.setForeground(new java.awt.Color(255, 255, 255));
         button_submit.setText("Zatwierdz");
         button_submit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -89,7 +98,9 @@ public class main_user_window extends javax.swing.JFrame {
             }
         });
 
+        button_2.setBackground(new java.awt.Color(0, 102, 102));
         button_2.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        button_2.setForeground(new java.awt.Color(255, 255, 255));
         button_2.setText("2");
         button_2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -97,7 +108,9 @@ public class main_user_window extends javax.swing.JFrame {
             }
         });
 
+        button_3.setBackground(new java.awt.Color(0, 102, 102));
         button_3.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        button_3.setForeground(new java.awt.Color(255, 255, 255));
         button_3.setText("3");
         button_3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -105,7 +118,9 @@ public class main_user_window extends javax.swing.JFrame {
             }
         });
 
+        button_5.setBackground(new java.awt.Color(0, 102, 102));
         button_5.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        button_5.setForeground(new java.awt.Color(255, 255, 255));
         button_5.setText("5");
         button_5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -113,7 +128,9 @@ public class main_user_window extends javax.swing.JFrame {
             }
         });
 
+        button_4.setBackground(new java.awt.Color(0, 102, 102));
         button_4.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        button_4.setForeground(new java.awt.Color(255, 255, 255));
         button_4.setText("4");
         button_4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -121,7 +138,9 @@ public class main_user_window extends javax.swing.JFrame {
             }
         });
 
+        button_6.setBackground(new java.awt.Color(0, 102, 102));
         button_6.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        button_6.setForeground(new java.awt.Color(255, 255, 255));
         button_6.setText("6");
         button_6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -129,7 +148,9 @@ public class main_user_window extends javax.swing.JFrame {
             }
         });
 
+        button_8.setBackground(new java.awt.Color(0, 102, 102));
         button_8.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        button_8.setForeground(new java.awt.Color(255, 255, 255));
         button_8.setText("8");
         button_8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -137,7 +158,9 @@ public class main_user_window extends javax.swing.JFrame {
             }
         });
 
+        button_7.setBackground(new java.awt.Color(0, 102, 102));
         button_7.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        button_7.setForeground(new java.awt.Color(255, 255, 255));
         button_7.setText("7");
         button_7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -145,7 +168,9 @@ public class main_user_window extends javax.swing.JFrame {
             }
         });
 
+        button_9.setBackground(new java.awt.Color(0, 102, 102));
         button_9.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        button_9.setForeground(new java.awt.Color(255, 255, 255));
         button_9.setText("9");
         button_9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -153,7 +178,9 @@ public class main_user_window extends javax.swing.JFrame {
             }
         });
 
+        button_0.setBackground(new java.awt.Color(0, 102, 102));
         button_0.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        button_0.setForeground(new java.awt.Color(255, 255, 255));
         button_0.setText("0");
         button_0.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

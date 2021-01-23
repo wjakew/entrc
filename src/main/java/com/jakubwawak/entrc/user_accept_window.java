@@ -7,6 +7,7 @@ package com.jakubwawak.entrc;
 
 import com.github.sarxos.webcam.Webcam;
 import com.mysql.cj.conf.ConnectionUrlParser.Pair;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
@@ -36,15 +37,17 @@ public final class user_accept_window extends javax.swing.JDialog {
     
     public user_accept_window(java.awt.Frame parent, boolean modal,Database_Connector database,Guard user) throws SQLException {
         super(parent, modal);
+        this.setTitle("Potwierdź tożsamość");
         this.database = database;
         this.setAlwaysOnTop(true);
         this.user = user;
+        
         photo_src = "";
         
         initComponents();
         load_window();
         this.setLocationRelativeTo(null);
-        
+        getContentPane().setBackground(Color.BLACK);
         setVisible(true);
     }
 
@@ -71,12 +74,15 @@ public final class user_accept_window extends javax.swing.JDialog {
         });
 
         label_action.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        label_action.setForeground(new java.awt.Color(255, 255, 255));
         label_action.setText("WEJSCIE/WYJSCIE");
 
         label_namesurname.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        label_namesurname.setForeground(new java.awt.Color(255, 255, 255));
         label_namesurname.setText("Imie nazwisko");
 
         button_accept.setFont(new java.awt.Font("Dialog", 0, 38)); // NOI18N
+        button_accept.setForeground(new java.awt.Color(0, 0, 0));
         button_accept.setText("ZATWIERDŹ");
         button_accept.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -84,7 +90,9 @@ public final class user_accept_window extends javax.swing.JDialog {
             }
         });
 
+        textarea_message.setBackground(new java.awt.Color(255, 255, 255));
         textarea_message.setColumns(20);
+        textarea_message.setForeground(new java.awt.Color(0, 0, 0));
         textarea_message.setRows(5);
         jScrollPane1.setViewportView(textarea_message);
 
