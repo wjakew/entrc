@@ -7,7 +7,12 @@ package com.jakubwawak.entrc;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.DatagramSocket;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -17,7 +22,7 @@ import java.util.Scanner;
  */
 public class Entrc {
     
-    final static String version = "v1.0.1";
+    final static String version = "v1.0.2";
     static Configuration run_configuration;
     static Database_Connector database;
     static Scanner user_handler;
@@ -30,7 +35,6 @@ public class Entrc {
             new Test();
             System.exit(0);
         }
-        
 	create_banner();
         database = new Database_Connector();
         run_configuration = new Configuration("config.txt");
@@ -90,15 +94,27 @@ public class Entrc {
     /**
      * Function for printing welcome banner
      */
-    static void create_banner(){
+    static void create_banner() throws UnknownHostException, SocketException{
         String banner = " _____ _   _ _____ ____   ____ \n" +
                         "| ____| \\ | |_   _|  _ \\ / ___|\n" +
                         "|  _| |  \\| | | | | |_) | |    \n" +
                         "| |___| |\\  | | | |  _ <| |___ \n" +
                         "|_____|_| \\_| |_| |_| \\_\\\\____|";
-        String addons = " VERSION: "+version + "   Jakub Wawak\n";
-        
+        String addons = " VERSION: "+version + "   Jakub Wawak\n\n";
+        addons = addons +"BUILD INFORMATION:\n";
+        addons = addons +"icon by: Freepik (Flaticon)\n";
+        addons = addons +"build date: 23.01.2020\n";
+        addons = addons +"machine local IP:"+get_IP_data()+"\n";
         System.out.println(banner);
         System.out.print(addons);
+    }
+    /**
+     * Function for loading local machine IP
+     */
+    static String get_IP_data() throws UnknownHostException, SocketException{
+        try(final DatagramSocket socket = new DatagramSocket()){
+            socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+            return socket.getLocalAddress().getHostAddress();
+          }
     }
 }

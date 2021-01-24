@@ -22,7 +22,7 @@ public class Test {
     Test() throws SQLException, IOException, ClassNotFoundException{
         dc = new Database_Connector();        
         dc.connect("localhost", "entrc_database", "root", "password");
-        //new manage_workers_window(null,true,dc);
+        new admin_pin_reset_window(null,true,dc);
         
     }
     

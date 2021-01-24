@@ -18,7 +18,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Database_Connector {
     
     // version of database 
-    final String version = "vC.0.5";
+    final String version = "vC.0.6";
     // header for logging data
     // connection object for maintaing connection to the database
     Connection con;
@@ -118,6 +118,66 @@ public class Database_Connector {
         }
         log("Database string: "+login_data);
     }
+    
+    /**
+     * Function for getting PIN data for managing client window
+     * @return ArrayList
+     * @throws SQLException 
+     */
+    ArrayList<String> get_admin_PIN_data() throws SQLException{
+        ArrayList<String> data_to_get = new ArrayList<>();
+        
+        String query = "SELECT * from CONFIGURATION;";
+        
+        try{
+            PreparedStatement ppst = con.prepareStatement(query);
+            
+            ResultSet rs = ppst.executeQuery();
+            
+            if ( rs.next() ){
+                data_to_get.add(rs.getString("entrc_user_exit_pin"));
+                data_to_get.add(rs.getString("entrc_user_ask_pin"));
+                data_to_get.add(rs.getString("entrc_user_manage_pin"));
+                data_to_get.add(rs.getString("entrc_admin_manage_pin"));
+                return data_to_get;
+            }
+            return null;
+            
+        }catch(SQLException e){
+            log("Failed to get admin PIN data ("+e.toString());
+            return null;
+        }
+    }
+    
+    /**
+     * Function for loading admin PIN data for managing client window
+     * @param data
+     * @return boolean
+     */
+    boolean load_admin_PIN_data(ArrayList<String> data) throws SQLException{
+        String query = "INSERT INTO CONFIGURATION\n" +
+                        "(entrc_user_exit_pin,entrc_user_ask_pin,entrc_user_manage_pin,entrc_admin_manage_pin)\n" +
+                        "VALUES\n" +
+                        "(?,?,?,?);";
+        
+        try{
+            PreparedStatement ppst = con.prepareStatement(query);
+            
+            ppst.setString(1,data.get(0));
+            ppst.setString(2,data.get(1));
+            ppst.setString(3,data.get(2));
+            ppst.setString(4,data.get(3));
+            
+            ppst.execute();
+            return true;
+        
+        }catch(SQLException e){
+            log("Failed to update PIN on database ("+e.toString()+")");
+            return false;
+        }
+    }
+        
+    
     
     /**
      * Function to generate user login
@@ -917,6 +977,33 @@ public class Database_Connector {
      */
     int check_resetcode(String code) throws SQLException{
         String query = "SELECT * FROM CONFIGURATION where entrc_user_ask_pin = ?";
+        PreparedStatement ppst = con.prepareStatement(query);
+        ppst.setString(1,code);       
+        try{
+            ResultSet rs = ppst.executeQuery();
+            
+            if ( rs.next() ){
+                return 1;
+            }
+            return 0;
+            
+        }catch(SQLException e){
+            log("Failed to check CONFIGURATION table ("+e.toString());
+            return -1;
+            }
+    }
+    /**
+     * Function for checking admin setting enable code
+     * @param code
+     * @return int
+     * @throws SQLException 
+     * return codes:
+     * 1 - pin accepted on the database - pin correct
+     * 0 - pin is not the same - pin rejected
+     * -1 - failed to check on the database, check log
+     */
+    int check_admincode(String code) throws SQLException{
+        String query = "SELECT * FROM CONFIGURATION where entrc_admin_manage_pin = ?";
         PreparedStatement ppst = con.prepareStatement(query);
         ppst.setString(1,code);       
         try{

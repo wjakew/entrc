@@ -6,6 +6,10 @@ all rights reserved
 package com.jakubwawak.entrc;
 
 import java.awt.Color;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.sql.SQLException;
 import javax.swing.JFrame;
 
@@ -20,16 +24,28 @@ public class main_user_window extends javax.swing.JFrame {
      */
     Database_Connector database;
     
-    public main_user_window(Database_Connector database) {
+    public main_user_window(Database_Connector database) throws UnknownHostException, SocketException, SocketException {
         initComponents();
-        this.setTitle("ENTRC APP v1.0.1");
+        this.setTitle("ENTRC APP v1.0.2 ("+get_IP_data()+")");
         this.database = database;
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         setResizable(false);
         getContentPane().setBackground(Color.BLACK);
         setVisible(true);
     }
-
+    /**
+     * Function for loading local machine IP
+     */
+    String get_IP_data() throws UnknownHostException, SocketException{
+        try(final DatagramSocket socket = new DatagramSocket()){
+            socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+            return socket.getLocalAddress().getHostAddress();
+          }
+        catch(Exception e){
+            new message_window(this,true,"Błąd pobierania IP");
+            return "";
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -320,6 +336,11 @@ public class main_user_window extends javax.swing.JFrame {
                 else if ( database.check_managecode(pin) == 1){
                     // manage users window invoked
                     new manage_workers_window(this,true,database);
+                    textfield_pin.setText("");
+                }
+                else if ( database.check_admincode(pin) == 1){
+                    // manage users window invoked
+                    new admin_pin_reset_window(this,true,database);
                     textfield_pin.setText("");
                 }
                 else{
