@@ -5,10 +5,10 @@ all rights reserved
  */
 package com.jakubwawak.entrc;
 
+import com.itextpdf.text.DocumentException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.DatagramSocket;
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.URISyntaxException;
@@ -22,13 +22,13 @@ import java.util.Scanner;
  */
 public class Entrc {
     
-    final static String version = "v1.0.2";
+    final static String version = "v1.0.3";
     static Configuration run_configuration;
     static Database_Connector database;
     static Scanner user_handler;
     static int debug = 0;
     
-    public static void main(String[] args) throws SQLException, IOException, FileNotFoundException, URISyntaxException, ClassNotFoundException{
+    public static void main(String[] args) throws SQLException, IOException, FileNotFoundException, URISyntaxException, ClassNotFoundException, DocumentException{
 
         // debug mode
         if (debug == 1){

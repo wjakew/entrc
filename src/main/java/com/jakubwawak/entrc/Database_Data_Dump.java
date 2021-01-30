@@ -5,6 +5,9 @@ all rights reserved
  */
 package com.jakubwawak.entrc;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,6 +40,28 @@ public class Database_Data_Dump {
     }
     
     /**
+     * Function for dumping data to file
+     * @param dump
+     * @param src
+     * @return
+     * @throws IOException 
+     */
+    String dump_to_file(ArrayList<String> dump, String src) throws IOException, SQLException{
+        try {
+                FileWriter writer = new FileWriter(src);
+                for( String line : dump){
+                    writer.write(line + "\n");
+                }
+                writer.close();
+                File writer_f = new File(src);
+                return writer_f.getAbsolutePath();
+          } catch (IOException e) {
+                database.log("Failed to save dump ("+e.toString()+")");
+                return null;
+        }
+    }
+    
+    /**
      * Function for dumping worker data from database;
      * @return ArrayList
      * @throws SQLException 
@@ -63,7 +88,29 @@ public class Database_Data_Dump {
             database.log("Failed to prepare dump (worker) ("+e.toString()+")");
             return null;
         }
+    }
+    
+    /**
+     * Function for dumping program log
+     * @return ArrayList
+     */
+    ArrayList<String> dump_program_log() throws SQLException{
+        ArrayList<String> data = new ArrayList<>();
+        String query = "SELECT * FROM PROGRAM_LOG";
         
+        try{
+            PreparedStatement ppst = database.con.prepareStatement(query);
+            ResultSet rs = ppst.executeQuery();
+            
+            while ( rs.next() ){
+                data.add(rs.getInt("program_log_id")+" "+rs.getString("program_log_desc"));
+            }
+            
+            return data;
+        }catch(SQLException e){
+            database.log("Failed to dump program log ("+e.toString()+")");
+            return null;
+        }
     }
     
 }

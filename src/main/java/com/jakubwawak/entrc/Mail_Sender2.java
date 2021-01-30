@@ -5,6 +5,7 @@ all rights reserved
  */
 package com.jakubwawak.entrc;
 
+import java.io.File;
 import javax.mail.PasswordAuthentication;
 import java.util.Properties;
 import javax.mail.Message;
@@ -28,10 +29,12 @@ public class Mail_Sender2 {
     
     // variables for maintaining 
     String message,title;
+    File attachment;
+    boolean attachment_set;
     
     // variables for administration data
-    String administration_mail = "";
-    String administration_pass = "";
+    String administration_mail = "main.tes.instruments@gmail.com";
+    String administration_pass = "minidysk";
     
     //Constructor
     /**
@@ -42,7 +45,7 @@ public class Mail_Sender2 {
     Mail_Sender2(String e_mail_to,String e_mail_from){
         to = e_mail_to;
         from = e_mail_from;
-        
+        attachment = null;
         properties = System.getProperties();
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", "465");
@@ -74,9 +77,19 @@ public class Mail_Sender2 {
     }
     
     /**
+     * Function for adding 
+     * @param attachment_src
+     * @return boolean
+     */
+    boolean set_attachment(String attachment_src){
+        attachment = new File(attachment_src);
+        return attachment.exists();
+    }
+    
+    /**
      * Function for sending e-mail
      */
-    void send_message(){
+    void send_message() throws MessagingException{
         try {
             // Create a default MimeMessage object.
             MimeMessage message = new MimeMessage(session);

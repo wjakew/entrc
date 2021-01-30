@@ -1,4 +1,5 @@
 com\jakubwawak\entrc\message_window_jdialog.class
+com\jakubwawak\entrc\options_window$1.class
 com\jakubwawak\entrc\manage_workers_window.class
 com\jakubwawak\entrc\admin_pin_reset_window$1.class
 com\jakubwawak\entrc\admin_pin_reset_window.class
@@ -18,6 +19,7 @@ com\jakubwawak\entrc\main_user_window$11.class
 com\jakubwawak\entrc\manage_workers_window$6.class
 com\jakubwawak\entrc\user_accept_window$2.class
 com\jakubwawak\entrc\Mail_Sender2.class
+com\jakubwawak\entrc\options_window.class
 com\jakubwawak\entrc\Test.class
 com\jakubwawak\entrc\manage_workers_window$3.class
 com\jakubwawak\entrc\addworker_window$2.class
@@ -36,6 +38,7 @@ com\jakubwawak\entrc\main_user_window$6.class
 com\jakubwawak\entrc\main_user_window$14.class
 com\jakubwawak\entrc\main_user_window$3.class
 com\jakubwawak\entrc\message_window$1.class
+com\jakubwawak\entrc\admin_pin_reset_window$2.class
 com\jakubwawak\entrc\Configuration.class
 com\jakubwawak\entrc\main_user_window$5.class
 com\jakubwawak\entrc\Database_Connector.class
@@ -48,4 +51,5 @@ com\jakubwawak\entrc\main_user_window$13.class
 com\jakubwawak\entrc\manage_workers_window$5.class
 com\jakubwawak\entrc\main_user_window$10.class
 com\jakubwawak\entrc\addworker_window.class
+com\jakubwawak\entrc\BarCodeCreator.class
 com\jakubwawak\entrc\reset_pin_window.class

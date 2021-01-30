@@ -299,6 +299,7 @@ public class Database_Connector {
         }   
     }
     
+    
     String get_worker_data(int id) throws SQLException{
         String query = "SELECT worker_name,worker_surname FROM WORKER where worker_id=?;";
         PreparedStatement ppst = con.prepareStatement(query);
@@ -360,7 +361,7 @@ public class Database_Connector {
      * @throws SQLException 
      */
     int log_PIN_FORGOT(int worker_id) throws SQLException{
-                LocalDateTime todayLocalDate = LocalDateTime.now( ZoneId.of( "Europe/Warsaw" ) );
+        LocalDateTime todayLocalDate = LocalDateTime.now( ZoneId.of( "Europe/Warsaw" ) );
         String query = "INSERT INTO USER_LOG\n" +
                        "(user_log_date,worker_id,user_log_action,user_log_desc,user_log_photo_src)\n" +
                        "VALUES\n" +
@@ -1222,6 +1223,35 @@ public class Database_Connector {
             log("Failed to reset pin for user(id:"+worker_id+") ("+e.toString()+")");
             return null;
         }
+    }
+    
+    /**
+     * Function for setting barcodes in database
+     * @param to_set
+     * @return
+     * @throws SQLException 
+     */
+    boolean set_barcode_data(BarCodeCreator to_set) throws SQLException{
+        LocalDateTime todayLocalDate = LocalDateTime.now( ZoneId.of( "Europe/Warsaw" ) );
+        String query = "INSERT INTO BARCODE_DATA "
+                + "(barcode_date,worker_id,barcode_raw_data)\n"
+                + "VALUES\n"
+                + "(?,?,?);";
         
+        try{
+            PreparedStatement ppst = con.prepareStatement(query);
+        
+            ppst.setObject(1,todayLocalDate);
+            ppst.setInt(2,get_worker_id_bypin(to_set.worker_pin));
+            to_set.generate_barcode();
+            ppst.setString(3,to_set.barcode_object.toString());
+            
+            ppst.execute();
+            return true;
+            
+        }catch(SQLException e){
+            log("Failed to set barcode data ("+e.toString()+")");
+            return false;
+        }
     }
 }

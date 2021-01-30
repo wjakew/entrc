@@ -26,7 +26,7 @@ public class main_user_window extends javax.swing.JFrame {
     
     public main_user_window(Database_Connector database) throws UnknownHostException, SocketException, SocketException {
         initComponents();
-        this.setTitle("ENTRC APP v1.0.2 ("+get_IP_data()+")");
+        this.setTitle("ENTRC APP v1.0.3 ("+get_IP_data()+")");
         this.database = database;
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         setResizable(false);

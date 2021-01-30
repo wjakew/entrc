@@ -49,6 +49,7 @@ public class admin_pin_reset_window extends javax.swing.JDialog {
         button_save = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         field_admin_manage_pin = new javax.swing.JTextField();
+        button_options = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Reset PIN - Administrator");
@@ -76,6 +77,13 @@ public class admin_pin_reset_window extends javax.swing.JDialog {
 
         field_admin_manage_pin.setText("jTextField1");
 
+        button_options.setText("Opcje");
+        button_options.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_optionsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -95,7 +103,10 @@ public class admin_pin_reset_window extends javax.swing.JDialog {
                             .addComponent(field_user_ask_pin)
                             .addComponent(field_manage_pin)
                             .addComponent(field_admin_manage_pin)))
-                    .addComponent(button_save, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(button_save, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(button_options)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -119,7 +130,9 @@ public class admin_pin_reset_window extends javax.swing.JDialog {
                     .addComponent(field_admin_manage_pin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(button_save, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(button_options)
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
@@ -132,6 +145,10 @@ public class admin_pin_reset_window extends javax.swing.JDialog {
             new message_window_jdialog(this,true,"Bład bazy danych: "+e.toString());
         }
     }//GEN-LAST:event_button_saveActionPerformed
+
+    private void button_optionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_optionsActionPerformed
+        new options_window(this,true,database);
+    }//GEN-LAST:event_button_optionsActionPerformed
 
     /**
      * Function maintaing logic in admin_pin_reset_window
@@ -248,6 +265,7 @@ public class admin_pin_reset_window extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton button_options;
     private javax.swing.JButton button_save;
     private javax.swing.JTextField field_admin_manage_pin;
     private javax.swing.JTextField field_manage_pin;
