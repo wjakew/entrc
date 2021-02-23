@@ -5,6 +5,7 @@ all rights reserved
  */
 package com.jakubwawak.entrc;
 
+import com.jakubwawak.database.Database_Connector;
 import java.sql.SQLException;
 
 /**
@@ -13,7 +14,7 @@ import java.sql.SQLException;
  */
 public class Guard {
     
-    String pin;                             // pin entered by user
+    public String pin;                             // pin entered by user
     Database_Connector database;            // connection to the database
     
     /**
@@ -23,11 +24,11 @@ public class Guard {
      * 0 - no attempt to accept user
      * -1 - user not accepted, pin incorrect
      */
-    int accepted;                           
+    public int accepted;                           
     
     
     // Constructor
-    Guard(String user_pin, Database_Connector database){
+    public Guard(String user_pin, Database_Connector database){
         pin = user_pin;
         this.database = database;
         accepted = 0;
@@ -37,7 +38,7 @@ public class Guard {
      * Function for checking user data
      * @throws SQLException 
      */
-    void check_credentials() throws SQLException{
+    public void check_credentials() throws SQLException{
         
         if ( database.check_credentials(pin) == 1 ){
             accepted = 1;

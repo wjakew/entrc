@@ -42,7 +42,7 @@ public class Mail_Sender2 {
      * @param e_mail_to
      * @param e_mail_from 
      */
-    Mail_Sender2(String e_mail_to,String e_mail_from){
+    public Mail_Sender2(String e_mail_to,String e_mail_from){
         to = e_mail_to;
         from = e_mail_from;
         attachment = null;
@@ -64,7 +64,7 @@ public class Mail_Sender2 {
      * Function for setting title
      * @param title 
      */
-    void set_title(String title){
+    public void set_title(String title){
         this.title = title;
     }
     
@@ -72,7 +72,7 @@ public class Mail_Sender2 {
      * Function for setting message
      * @param message 
      */
-    void set_message(String message){
+    public void set_message(String message){
         this.message = message;
     }
     
@@ -81,7 +81,7 @@ public class Mail_Sender2 {
      * @param attachment_src
      * @return boolean
      */
-    boolean set_attachment(String attachment_src){
+    public boolean set_attachment(String attachment_src){
         attachment = new File(attachment_src);
         return attachment.exists();
     }
@@ -89,7 +89,7 @@ public class Mail_Sender2 {
     /**
      * Function for sending e-mail
      */
-    void send_message() throws MessagingException{
+    public void send_message() throws MessagingException{
         try {
             // Create a default MimeMessage object.
             MimeMessage message = new MimeMessage(session);

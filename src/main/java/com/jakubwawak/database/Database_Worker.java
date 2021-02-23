@@ -3,7 +3,7 @@ by Jakub Wawak
 kubawawak@gmail.com
 all rights reserved
  */
-package com.jakubwawak.entrc;
+package com.jakubwawak.database;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,7 +22,7 @@ public class Database_Worker {
     Database_Connector database;
     
     //Constructor
-    Database_Worker(Database_Connector database){
+    public Database_Worker(Database_Connector database){
         this.database = database;
     }
     
@@ -31,7 +31,7 @@ public class Database_Worker {
      * @return ArrayList
      * @throws SQLException 
      */
-    ArrayList<String> get_all_active_workers() throws SQLException{
+    public ArrayList<String> get_all_active_workers() throws SQLException{
         ArrayList<String> data = new ArrayList<>();
         
         String query = "SELECT * FROM WORKER";
@@ -64,7 +64,7 @@ public class Database_Worker {
      * @return ArrayList
      * @throws SQLException 
      */
-    ArrayList<String> get_all_workers() throws SQLException{
+    public ArrayList<String> get_all_workers() throws SQLException{
         String query = "SELECT * FROM WORKER;";
         ArrayList<String> data = new ArrayList<>();
         try{
@@ -125,7 +125,7 @@ public class Database_Worker {
      * @return String
      * @throws SQLException 
      */
-    String enroll_pin() throws SQLException{
+    public String enroll_pin() throws SQLException{
         String query = "SELECT worker_pin from WORKER";
         ArrayList<String> pin_collection = new ArrayList<>();
         
@@ -161,7 +161,7 @@ public class Database_Worker {
      * 0 - no worker with given id
      * -1 - database connector failed
      */
-    int get_worker_id_bypin(String pin) throws SQLException{
+    public int get_worker_id_bypin(String pin) throws SQLException{
         String query = "SELECT worker_id FROM WORKER WHERE worker_pin=?";
         
         PreparedStatement ppst = database.con.prepareStatement(query);
@@ -185,7 +185,7 @@ public class Database_Worker {
      * @return ArrayList
      * @throws SQLException 
      */
-    ArrayList<String> get_worker_byid(int worker_id) throws SQLException{
+    public ArrayList<String> get_worker_byid(int worker_id) throws SQLException{
         String query = "SELECT * FROM WORKER WHERE worker_id = ?;";
         ArrayList<String> data = new ArrayList<>();
         try{
@@ -270,7 +270,7 @@ public class Database_Worker {
      * @param position
      * @return String
      */
-    String add_worker(String name,String surname,String pin,String position) throws SQLException{
+    public String add_worker(String name,String surname,String pin,String position) throws SQLException{
         String query = "INSERT INTO WORKER (worker_login,worker_name,worker_surname,worker_pin,worker_position)\n"
                 + "VALUES\n"
                 + "(?,?,?,?,?);";
@@ -302,7 +302,7 @@ public class Database_Worker {
      * @return String
      * @throws SQLException 
      */
-    String reset_pin(int worker_id) throws SQLException{
+    public String reset_pin(int worker_id) throws SQLException{
         String new_pin = enroll_pin();
         
         String query = "UPDATE WORKER SET worker_pin = ? WHERE worker_id = ?;";
@@ -331,7 +331,7 @@ public class Database_Worker {
      * @return boolean
      * @throws SQLException 
      */
-    boolean update_worker(int worker_id,String name,String surname,String position) throws SQLException{
+    public boolean update_worker(int worker_id,String name,String surname,String position) throws SQLException{
         String query = "UPDATE WORKER SET worker_name = ?, "
                 + "worker_surname = ?, worker_position = ? WHERE worker_id = ?;";
         

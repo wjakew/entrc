@@ -3,13 +3,13 @@ by Jakub Wawak
 kubawawak@gmail.com
 all rights reserved
  */
-package com.jakubwawak.entrc;
+package com.jakubwawak.entrc_gui;
 
 /**
- *Object for printing message to user
+ *Object for printing message
  * @author jakubwawak
  */
-public class message_window extends javax.swing.JDialog {
+public class message_window_jdialog extends javax.swing.JDialog {
 
     /**
      * Creates new form message_window
@@ -17,7 +17,7 @@ public class message_window extends javax.swing.JDialog {
      * @param modal
      * @param message
      */
-    public message_window(java.awt.Frame parent, boolean modal,String message) {
+    public message_window_jdialog(javax.swing.JDialog parent, boolean modal,String message) {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);

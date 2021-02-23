@@ -1,4 +1,12 @@
+/*
+by Jakub Wawak
+kubawawak@gmail.com
+all rights reserved
+ */
 package com.jakubwawak.entrc;
+
+
+import com.jakubwawak.database.Database_Connector;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
@@ -23,9 +31,9 @@ all rights reserved
  */
 public class BarCodeCreator {
     
-    String worker_pin;
+    public String worker_pin;
     Date date;
-    Barcode128 barcode_object;
+    public Barcode128 barcode_object;
     Database_Connector database;
     
     //Constructor
@@ -49,7 +57,7 @@ public class BarCodeCreator {
     /**
      * Function for generating barcode
      */
-    void generate_barcode(){
+    public void generate_barcode(){
         barcode_object = new Barcode128();
         String data = parse_date()+worker_pin;
         barcode_object.setGenerateChecksum(true);

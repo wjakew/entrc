@@ -3,7 +3,7 @@ by Jakub Wawak
 kubawawak@gmail.com
 all rights reserved
  */
-package com.jakubwawak.entrc;
+package com.jakubwawak.entrc_gui;
 
 /**
  *Object for creating error window

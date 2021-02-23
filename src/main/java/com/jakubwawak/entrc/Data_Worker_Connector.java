@@ -38,12 +38,12 @@ public final class Data_Worker_Connector {
     File file;                          // for storing file data
     BufferedReader buffer;              // buffer for reading
     FileWriter f_writter;               // buffer for writting
-    boolean exists;                     // flag for checking if file is new or not
-    ArrayList<ArrayList<String>> lines; // collection for storing parsed lines
+    public boolean exists;                     // flag for checking if file is new or not
+    public ArrayList<ArrayList<String>> lines; // collection for storing parsed lines
     int given_lines;                    // amount of read lines
     
     // Constuctor
-    Data_Worker_Connector(String path, int mode) throws IOException{
+    public Data_Worker_Connector(String path, int mode) throws IOException{
         file_path = path;
         this.mode = mode;
         
@@ -64,7 +64,7 @@ public final class Data_Worker_Connector {
      * @param lines
      * @throws IOException 
      */
-    void write_file(ArrayList<String> lines) throws IOException{
+    public void write_file(ArrayList<String> lines) throws IOException{
         f_writter = new FileWriter(file_path);
         for(String line : lines){
             if(validate(line)){

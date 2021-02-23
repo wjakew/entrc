@@ -5,6 +5,8 @@ all rights reserved
  */
 package com.jakubwawak.entrc;
 
+import com.jakubwawak.database.Database_Connector;
+import com.jakubwawak.entrc_gui.main_user_window;
 import com.itextpdf.text.DocumentException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -22,7 +24,7 @@ import java.util.Scanner;
  */
 public class Entrc {
     
-    final static String version = "v1.0.3";
+    final static String version = "v1.0.31";
     static Configuration run_configuration;
     static Database_Connector database;
     static Scanner user_handler;
@@ -44,7 +46,7 @@ public class Entrc {
                 database.connect(run_configuration.ip, run_configuration.database, run_configuration.databaseuser, run_configuration.databasepass);
                 run_configuration.show_configuration();
                 if( database.connected ){
-                    new main_user_window(database);
+                    new main_user_window(database,version);
                 }
                 else{
                     System.out.println("Błąd połączenia z bazą danych. Skontaktuj się z administratorem");
@@ -73,7 +75,7 @@ public class Entrc {
                     if ( database.connected ){
                         database.config = run_configuration;
                         database.config.copy_configuration();
-                        new main_user_window(database);
+                        new main_user_window(database,version);
                     }
                     else{
                         System.out.println("Błąd połączenia z bazą danych. Skontaktuj się z administratorem");
@@ -103,7 +105,7 @@ public class Entrc {
         String addons = " VERSION: "+version + "   Jakub Wawak\n\n";
         addons = addons +"BUILD INFORMATION:\n";
         addons = addons +"icon by: Freepik (Flaticon)\n";
-        addons = addons +"build date: 23.01.2020\n";
+        addons = addons +"build date: 23.02.2020\n";
         addons = addons +"machine local IP:"+get_IP_data()+"\n";
         System.out.println(banner);
         System.out.print(addons);

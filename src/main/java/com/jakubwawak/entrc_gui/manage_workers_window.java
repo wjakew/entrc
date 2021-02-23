@@ -3,8 +3,13 @@ by Jakub Wawak
 kubawawak@gmail.com
 all rights reserved
  */
-package com.jakubwawak.entrc;
+package com.jakubwawak.entrc_gui;
 
+import com.jakubwawak.entrc.Data_Worker_Connector;
+import com.jakubwawak.database.Database_Connector;
+import com.jakubwawak.database.Database_Data_Dump;
+import com.jakubwawak.database.Database_Data_Import;
+import com.jakubwawak.database.Database_Worker;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;

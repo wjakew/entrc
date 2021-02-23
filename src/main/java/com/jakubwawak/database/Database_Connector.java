@@ -3,8 +3,10 @@ by Jakub Wawak
 kubawawak@gmail.com
 all rights reserved
  */
-package com.jakubwawak.entrc;
+package com.jakubwawak.database;
 
+import com.jakubwawak.entrc.BarCodeCreator;
+import com.jakubwawak.entrc.Configuration;
 import com.mysql.cj.conf.ConnectionUrlParser.Pair;
 import java.sql.*;
 import java.util.ArrayList;
@@ -23,12 +25,12 @@ public class Database_Connector {
     // connection object for maintaing connection to the database
     Connection con;
     
-    Configuration config;
+    public Configuration config;
     // variable for debug purposes
     final int debug = 1;
     
     
-    boolean connected;                      // flag for checking connection to the database
+    public boolean connected;                      // flag for checking connection to the database
     String ip;                              // ip data for the connector
     String database_name;                   // name of the database
     String database_user,database_password; // user data for cred
@@ -37,7 +39,7 @@ public class Database_Connector {
     /**
      * Constructor
      */
-    Database_Connector() throws SQLException, ClassNotFoundException{
+    public Database_Connector() throws SQLException, ClassNotFoundException{
         con = null;
         database_log = new ArrayList<>();
         connected = false;
@@ -53,7 +55,7 @@ public class Database_Connector {
      * Function for gathering database log
      * @param log 
      */
-    void log(String log) throws SQLException{
+    public void log(String log) throws SQLException{
         java.util.Date actual_date = new java.util.Date();
         database_log.add("("+actual_date.toString()+")"+" - "+log);
         System.out.println("ENTRC LOG: "+database_log.get(database_log.size()-1));
@@ -86,7 +88,7 @@ public class Database_Connector {
      * Function for printing info data on the screen
      * @param data 
      */
-    void info_print(String data){
+    public void info_print(String data){
         if ( debug == 1 ){
             System.out.println(data);
         }
@@ -99,7 +101,7 @@ public class Database_Connector {
      * @param password
      * @throws SQLException 
      */
-    void connect(String ip,String database_name,String user,String password) throws SQLException{
+    public void connect(String ip,String database_name,String user,String password) throws SQLException{
         this.ip = ip;
         this.database_name = database_name;
         database_user = user;
@@ -124,7 +126,7 @@ public class Database_Connector {
      * @return ArrayList
      * @throws SQLException 
      */
-    ArrayList<String> get_admin_PIN_data() throws SQLException{
+    public ArrayList<String> get_admin_PIN_data() throws SQLException{
         ArrayList<String> data_to_get = new ArrayList<>();
         
         String query = "SELECT * from CONFIGURATION;";
@@ -154,7 +156,7 @@ public class Database_Connector {
      * @param data
      * @return boolean
      */
-    boolean load_admin_PIN_data(ArrayList<String> data) throws SQLException{
+    public boolean load_admin_PIN_data(ArrayList<String> data) throws SQLException{
         String query = "INSERT INTO CONFIGURATION\n" +
                         "(entrc_user_exit_pin,entrc_user_ask_pin,entrc_user_manage_pin,entrc_admin_manage_pin)\n" +
                         "VALUES\n" +
@@ -181,7 +183,7 @@ public class Database_Connector {
     
     /**
      * Function to generate user login
-     * @return 
+     * @return String
      */
     String login_generator(String name,String surname) throws SQLException{
         int numbers[] = {1,2,3,4,5,6,7,8,9,10,11};
@@ -222,7 +224,7 @@ public class Database_Connector {
      * @return boolean
      * @throws SQLException 
      */
-    boolean log_ERROR(String error,String error_code) throws SQLException{
+    public boolean log_ERROR(String error,String error_code) throws SQLException{
         String query = "INSERT INTO ERROR_LOG \n"
                 + " (error_log_code,error_log_desc)\n"
                 + " VALUES"
@@ -253,7 +255,7 @@ public class Database_Connector {
      * 0 - no worker with given id
      * -1 - database connector failed
      */
-    int get_worker_id_bypin(String pin) throws SQLException{
+    public int get_worker_id_bypin(String pin) throws SQLException{
         String query = "SELECT worker_id FROM WORKER WHERE worker_pin=?";
         
         PreparedStatement ppst = con.prepareStatement(query);
@@ -279,7 +281,7 @@ public class Database_Connector {
      * Returns null if worker don't exist
      * NOTE: less than probable, func used only after get_worker_id_bypin(String pin)
      */
-    String get_worker_data(String pin) throws SQLException{
+    public String get_worker_data(String pin) throws SQLException{
         String query = "SELECT worker_name,worker_surname FROM WORKER where worker_pin=?;";
         PreparedStatement ppst = con.prepareStatement(query);
         ppst.setString(1,pin);
@@ -300,7 +302,7 @@ public class Database_Connector {
     }
     
     
-    String get_worker_data(int id) throws SQLException{
+    public String get_worker_data(int id) throws SQLException{
         String query = "SELECT worker_name,worker_surname FROM WORKER where worker_id=?;";
         PreparedStatement ppst = con.prepareStatement(query);
         ppst.setInt(1,id);
@@ -328,7 +330,7 @@ public class Database_Connector {
      * 1 - successfully added log record
      * -1 - error on the database
      */
-    int log_LOGIN_FAILED(String pin) throws SQLException{
+    public int log_LOGIN_FAILED(String pin) throws SQLException{
         LocalDateTime todayLocalDate = LocalDateTime.now( ZoneId.of( "Europe/Warsaw" ) );
         String query = "INSERT INTO USER_LOG\n" +
                        "(user_log_date,worker_id,user_log_action,user_log_desc,user_log_photo_src)\n" +
@@ -360,7 +362,7 @@ public class Database_Connector {
      * @return
      * @throws SQLException 
      */
-    int log_PIN_FORGOT(int worker_id) throws SQLException{
+    public int log_PIN_FORGOT(int worker_id) throws SQLException{
         LocalDateTime todayLocalDate = LocalDateTime.now( ZoneId.of( "Europe/Warsaw" ) );
         String query = "INSERT INTO USER_LOG\n" +
                        "(user_log_date,worker_id,user_log_action,user_log_desc,user_log_photo_src)\n" +
@@ -394,7 +396,7 @@ public class Database_Connector {
      * 0 - can't find user with that pin
      * 1 - user accepted and log
      */
-    int log_LOGIN_ACCEPT(String pin) throws SQLException{
+    public int log_LOGIN_ACCEPT(String pin) throws SQLException{
         LocalDateTime todayLocalDate = LocalDateTime.now( ZoneId.of( "Europe/Warsaw" ) );
         String query = "INSERT INTO USER_LOG\n" +
                        "(user_log_date,worker_id,user_log_action,user_log_desc,user_log_photo_src)\n" +
@@ -432,7 +434,7 @@ public class Database_Connector {
      * 1 - successfully added log record
      * -1 - error on the database
      */
-    int log_INFO(int worker_id,String log) throws SQLException{
+    public int log_INFO(int worker_id,String log) throws SQLException{
         LocalDateTime todayLocalDate = LocalDateTime.now( ZoneId.of( "Europe/Warsaw" ) );
         String query = "INSERT INTO USER_LOG\n" +
                        "(user_log_date,worker_id,user_log_action,user_log_desc,user_log_photo_src)\n" +
@@ -466,7 +468,7 @@ public class Database_Connector {
      * 1 - successfully added log record
      * -1 - error on the database
      */
-    int log_ENTER(int worker_id,String photo_src) throws SQLException{
+    public int log_ENTER(int worker_id,String photo_src) throws SQLException{
         LocalDateTime todayLocalDate = LocalDateTime.now( ZoneId.of( "Europe/Warsaw" ) );
         String query = "INSERT INTO USER_LOG\n" +
                        "(user_log_date,worker_id,user_log_action,user_log_desc,user_log_photo_src)\n" +
@@ -502,7 +504,7 @@ public class Database_Connector {
      * 0 - ENTER log for given worker_id not found
      * -1 - database error
      */
-    int get_lastid_logENTER(int worker_id) throws SQLException{
+    public int get_lastid_logENTER(int worker_id) throws SQLException{
         String query = "SELECT * from USER_LOG WHERE worker_id = ? AND user_log_action = 'ENTER' ORDER BY user_log_id DESC LIMIT 1;";
         PreparedStatement ppst = con.prepareStatement(query);
         try{
@@ -530,7 +532,7 @@ public class Database_Connector {
      * 1 - successfully added log record
      * -1 - error on the database
      */
-    int log_EXIT(int worker_id,String photo_src) throws SQLException{
+    public int log_EXIT(int worker_id,String photo_src) throws SQLException{
         LocalDateTime todayLocalDate = LocalDateTime.now( ZoneId.of( "Europe/Warsaw" ) );
         String query = "INSERT INTO USER_LOG\n" +
                        "(user_log_date,worker_id,user_log_action,user_log_desc,user_log_photo_src)\n" +
@@ -565,7 +567,7 @@ public class Database_Connector {
      * 0 - ENTER log for given worker_id not found
      * -1 - database error
      */
-    int get_lastid_logEXIT(int worker_id) throws SQLException{
+    public int get_lastid_logEXIT(int worker_id) throws SQLException{
         String query = "SELECT * from USER_LOG WHERE worker_id = ? AND user_log_action = 'EXIT' ORDER BY user_log_id DESC LIMIT 1;";
         PreparedStatement ppst = con.prepareStatement(query);
         try{
@@ -592,7 +594,7 @@ public class Database_Connector {
      * @return Boolean
      * @throws SQLException 
      */
-    boolean set_entrance_event(int worker_id,String photo_src) throws SQLException{
+    public boolean set_entrance_event(int worker_id,String photo_src) throws SQLException{
         log_ENTER(worker_id,photo_src);
         LocalDateTime entrance_time = LocalDateTime.now( ZoneId.of( "Europe/Warsaw" ) );
         String query =  "INSERT INTO ENTRANCE\n" +
@@ -672,7 +674,7 @@ public class Database_Connector {
      *  0 - last entrance not found
      * -1 - error on the database
      */
-    int get_lastid_ENTRANCE(int worker_id) throws SQLException{
+    public int get_lastid_ENTRANCE(int worker_id) throws SQLException{
         String query = "SELECT * from ENTRANCE WHERE worker_id = ? ORDER BY user_log_id DESC LIMIT 1;";
         PreparedStatement ppst = con.prepareStatement(query);
         try{
@@ -701,7 +703,7 @@ public class Database_Connector {
      *  0 - last entrance not found
      * -1 - error on the database
      */
-    int get_lastid_EXIT(int worker_id) throws SQLException{
+    public int get_lastid_EXIT(int worker_id) throws SQLException{
         String query = "SELECT * from ENTRANCE_EXIT WHERE worker_id = ? ORDER BY user_log_id DESC LIMIT 1;";
         PreparedStatement ppst = con.prepareStatement(query);
         try{
@@ -731,7 +733,7 @@ public class Database_Connector {
      * 1 - succesfully added exit event
      * -1 - database fail
      */
-    int set_exit_event(int worker_id,String photo_src) throws SQLException{
+    public int set_exit_event(int worker_id,String photo_src) throws SQLException{
         log_EXIT(worker_id,photo_src);
         LocalDateTime exit_time = LocalDateTime.now( ZoneId.of( "Europe/Warsaw" ) );
         
@@ -764,7 +766,7 @@ public class Database_Connector {
      * @return Pair
      * Function gathers last event name and name + surname combo
      */
-    Pair<String,String> prepare_photo_name(int worker_id) throws SQLException{
+    public Pair<String,String> prepare_photo_name(int worker_id) throws SQLException{
         
         // getting last event name
         String query = "SELECT * FROM USER_LOG where worker_id = ? ORDER BY user_log_id DESC LIMIT 1;";
@@ -828,7 +830,7 @@ public class Database_Connector {
      * EXIT_F   - last exit has no pair
      * NEW      - no last records
      */
-    Pair<LocalDateTime,String> get_last_user_event(int worker_id) throws SQLException{
+    public Pair<LocalDateTime,String> get_last_user_event(int worker_id) throws SQLException{
         LocalDateTime time_entrance,time_exit;
         LocalDateTime time_now = LocalDateTime.now( ZoneId.of( "Europe/Warsaw" ) );
         
@@ -947,7 +949,7 @@ public class Database_Connector {
      * 0 - pin is not the same - pin rejected
      * -1 - failed to check on the database, check log
      */
-    int check_exitcode(String code) throws SQLException{
+    public int check_exitcode(String code) throws SQLException{
         String query = "SELECT * FROM CONFIGURATION where entrc_user_exit_pin = ?";
         
         PreparedStatement ppst = con.prepareStatement(query);
@@ -976,7 +978,7 @@ public class Database_Connector {
      * 0 - pin is not the same - pin rejected
      * -1 - failed to check on the database, check log
      */
-    int check_resetcode(String code) throws SQLException{
+    public int check_resetcode(String code) throws SQLException{
         String query = "SELECT * FROM CONFIGURATION where entrc_user_ask_pin = ?";
         PreparedStatement ppst = con.prepareStatement(query);
         ppst.setString(1,code);       
@@ -991,7 +993,31 @@ public class Database_Connector {
         }catch(SQLException e){
             log("Failed to check CONFIGURATION table ("+e.toString());
             return -1;
+        }
+    }
+    
+    /**
+     * Function from checking show ip code user input
+     * @param code
+     * @return Integer
+     * @throws SQLException 
+     */
+    public int check_showipcode(String code) throws SQLException{
+        String query = "SELECT * FROM CONFIGURATION where entrc_admin_show_ip = ?";
+        PreparedStatement ppst = con.prepareStatement(query);
+        ppst.setString(1,code);       
+        try{
+            ResultSet rs = ppst.executeQuery();
+            
+            if ( rs.next() ){
+                return 1;
             }
+            return 0;
+            
+        }catch(SQLException e){
+            log("Failed to check CONFIGURATION table ("+e.toString());
+            return -1;
+        }
     }
     /**
      * Function for checking admin setting enable code
@@ -1003,7 +1029,7 @@ public class Database_Connector {
      * 0 - pin is not the same - pin rejected
      * -1 - failed to check on the database, check log
      */
-    int check_admincode(String code) throws SQLException{
+    public int check_admincode(String code) throws SQLException{
         String query = "SELECT * FROM CONFIGURATION where entrc_admin_manage_pin = ?";
         PreparedStatement ppst = con.prepareStatement(query);
         ppst.setString(1,code);       
@@ -1026,7 +1052,7 @@ public class Database_Connector {
      * @return
      * @throws SQLException 
      */
-    int check_managecode(String code) throws SQLException{
+    public int check_managecode(String code) throws SQLException{
         String query = "SELECT * FROM CONFIGURATION where entrc_user_manage_pin = ?";
         PreparedStatement ppst = con.prepareStatement(query);
         ppst.setString(1,code);       
@@ -1054,7 +1080,7 @@ public class Database_Connector {
      * 0 - check unsuccessful - wrong pin
      * -1 - database connector error
      */
-    int check_credentials(String code) throws SQLException{
+    public int check_credentials(String code) throws SQLException{
         String query = "SELECT * FROM WORKER WHERE worker_pin = ?";
         
         PreparedStatement ppst = con.prepareStatement(query);
@@ -1082,8 +1108,8 @@ public class Database_Connector {
      * @return String
      * @throws SQLException 
      */
-    String check_message(int worker_id) throws SQLException{
-        String query = "SELECT user_message_content FROM USER_MESSAGE where worker_id = ? and user_message_seen = 0;";
+    public String check_message(int worker_id) throws SQLException{
+        String query = "SELECT user_message_content FROM USER_MESSAGE where worker_id = ? or worker_id = 1 and user_message_seen = 0;";
         PreparedStatement ppst = con.prepareStatement(query);
         ppst.setInt(1, worker_id);
         
@@ -1108,7 +1134,7 @@ public class Database_Connector {
      * @return
      * @throws SQLException 
      */
-    boolean set_message_seen(int worker_id) throws SQLException{
+    public boolean set_message_seen(int worker_id) throws SQLException{
         String query = "UPDATE USER_MESSAGE SET user_message_seen = 1 where worker_id = ?;";
         
         PreparedStatement ppst = con.prepareStatement(query);
@@ -1129,7 +1155,7 @@ public class Database_Connector {
      * @return
      * @throws SQLException 
      */
-    ArrayList<String> get_all_workers() throws SQLException{
+    public ArrayList<String> get_all_workers() throws SQLException{
         ArrayList<String> data_toRet = new ArrayList<>();
         String query = "SELECT * from WORKER;";
         
@@ -1206,7 +1232,7 @@ public class Database_Connector {
      * @return String
      * @throws SQLException 
      */
-    String reset_pin(int worker_id) throws SQLException{
+    public String reset_pin(int worker_id) throws SQLException{
         String new_pin = enroll_pin();
         
         String query = "UPDATE WORKER SET worker_pin = ? WHERE worker_id = ?;";

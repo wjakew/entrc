@@ -3,8 +3,11 @@ by Jakub Wawak
 kubawawak@gmail.com
 all rights reserved
  */
-package com.jakubwawak.entrc;
+package com.jakubwawak.entrc_gui;
 
+import com.jakubwawak.database.Database_Connector;
+import com.jakubwawak.database.Database_Data_Dump;
+import com.jakubwawak.entrc.Mail_Sender2;
 import java.util.ArrayList;
 import java.util.Date;
 

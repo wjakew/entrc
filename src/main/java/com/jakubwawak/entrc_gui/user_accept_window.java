@@ -3,9 +3,11 @@ by Jakub Wawak
 kubawawak@gmail.com
 all rights reserved
  */
-package com.jakubwawak.entrc;
+package com.jakubwawak.entrc_gui;
 
 import com.github.sarxos.webcam.Webcam;
+import com.jakubwawak.database.Database_Connector;
+import com.jakubwawak.entrc.Guard;
 import com.mysql.cj.conf.ConnectionUrlParser.Pair;
 import java.awt.Color;
 import java.awt.event.KeyEvent;

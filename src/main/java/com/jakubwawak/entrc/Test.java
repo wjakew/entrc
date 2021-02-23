@@ -5,6 +5,7 @@ all rights reserved
  */
 package com.jakubwawak.entrc;
 
+import com.jakubwawak.database.Database_Connector;
 import com.itextpdf.text.DocumentException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
