@@ -40,7 +40,8 @@ CREATE TABLE CONFIGURATION
 entrc_user_exit_pin VARCHAR(10),
 entrc_user_ask_pin VARCHAR(10),
 entrc_user_manage_pin VARCHAR(10),
-entrc_admin_manage_pin VARCHAR(10)
+entrc_admin_manage_pin VARCHAR(10),
+entrc_admin_show_ip VARCHAR(10)
 );
 -- table for storing worker data (id0)
 CREATE TABLE WORKER
@@ -164,9 +165,9 @@ VALUES
 ("brak","brak","brak","brak","brak");
 -- creating configuration data
 INSERT INTO CONFIGURATION
-(entrc_user_exit_pin,entrc_user_ask_pin,entrc_user_manage_pin,entrc_admin_manage_pin)
+(entrc_user_exit_pin,entrc_user_ask_pin,entrc_user_manage_pin,entrc_admin_manage_pin,entrc_admin_show_ip)
 VALUES
-("999999","666666","7777777","28450872");
+("999999","666666","7777777","28450872","69696969");
 -- creating admin account
 INSERT INTO ADMIN_DATA
 (admin_login,admin_password,admin_level,admin_email,admin_active)
