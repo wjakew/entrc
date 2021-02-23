@@ -15,6 +15,9 @@ drop table if exists ENTRANCE_EXIT;
 drop table if exists ENTRANCE;
 drop table if exists USER_LOG;
 drop table if exists DATA_LOG;
+drop table if exists GRAVEYARD;
+drop table if exists ADMIN_GRAVEYARD;
+drop table if exists ADMIN_PRIVILAGES;
 drop table if exists ADMIN_DATA;
 drop table if exists BARCODE_DATA;
 drop table if exists WORKER;
@@ -63,9 +66,38 @@ CREATE TABLE ADMIN_DATA
 (
 admin_id INT PRIMARY KEY AUTO_INCREMENT,
 admin_login VARCHAR(30),
-admin_password VARCHAR(50),
+admin_password VARCHAR(150),
 admin_email VARCHAR(50),
-admin_level INT
+admin_level INT,
+admin_active INT
+);
+-- table for storing privilages for admin access
+CREATE TABLE ADMIN_PRIVILAGES
+(
+admin_privilages_id INT PRIMARY KEY AUTO_INCREMENT,
+admin_id INT,
+admin_privilages_string VARCHAR(150),
+
+CONSTRAINT fk_adminprivilages FOREIGN KEY (admin_id) REFERENCES ADMIN_DATA(admin_id)
+);
+-- table for storing fired workers
+CREATE TABLE GRAVEYARD
+(
+graveyard_id INT PRIMARY KEY AUTO_INCREMENT,
+graveyard_date DATE,
+worker_id INT,
+admin_id INT,
+
+CONSTRAINT fk_graveyard FOREIGN KEY (worker_id) REFERENCES WORKER(worker_id),
+CONSTRAINT fk_graveyard2 FOREIGN KEY (admin_id) REFERENCES ADMIN_DATA(admin_id)
+);
+-- table for storing fired admins
+CREATE TABLE ADMIN_GRAVEYARD
+(
+graveyard_id INT PRIMARY KEY AUTO_INCREMENT,
+graveyard_date DATE,
+admin_id INT,
+CONSTRAINT fk_a_graveyard2 FOREIGN KEY (admin_id) REFERENCES ADMIN_DATA(admin_id)
 );
 -- table for storing log made by admin (id2)
 CREATE TABLE DATA_LOG
@@ -137,6 +169,6 @@ VALUES
 ("999999","666666","7777777","28450872");
 -- creating admin account
 INSERT INTO ADMIN_DATA
-(admin_login,admin_password,admin_level,admin_email)
+(admin_login,admin_password,admin_level,admin_email,admin_active)
 VALUES
-("admin","admin",1,"");
+("admin","21232f297a57a5a743894a0e4a801fc3",1,"",1);
