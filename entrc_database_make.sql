@@ -5,10 +5,12 @@ kubawawak@gmail.com
 version (from schema) v1.0.0
 sql script that reloads ENTRC database
 */	
+USE entrc_database;
 
 -- checking if old data is on the database 
 drop table if exists PROGRAM_LOG;
 drop table if exists ERROR_LOG;
+drop table if exists RUNTIME;
 drop table if exists CONFIGURATION;
 drop table if exists USER_MESSAGE;
 drop table if exists ENTRANCE_EXIT;
@@ -33,6 +35,13 @@ CREATE TABLE ERROR_LOG
 error_log_id INT PRIMARY KEY AUTO_INCREMENT,
 error_log_code VARCHAR(10),
 error_log_desc VARCHAR(250)
+);
+-- table for storing client app configuration
+CREATE TABLE RUNTIME
+(
+runtime_id INT PRIMARY KEY AUTO_INCREMENT,
+runtime_license VARCHAR(19),
+runtime_macaddress VARCHAR(50)
 );
 -- table for stoing configuration data
 CREATE TABLE CONFIGURATION
