@@ -27,11 +27,8 @@ public class Test {
         dc = new Database_Connector();        
         dc.connect("localhost", "entrc_database", "root", "password");
         
-        BarCodeCreator bcc = new BarCodeCreator("1888",dc);
-        
-        bcc.generate_barcode();
-        
-        bcc.create_pdf();
+        RuntimeChecker rtc = new RuntimeChecker();
+        rtc.after_check(dc);
         
     }
     

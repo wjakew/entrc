@@ -50,6 +50,7 @@ public final class user_accept_window extends javax.swing.JDialog {
         load_window();
         this.setLocationRelativeTo(null);
         getContentPane().setBackground(Color.BLACK);
+        button_accept.requestFocus();
         setVisible(true);
     }
 
@@ -89,6 +90,11 @@ public final class user_accept_window extends javax.swing.JDialog {
         button_accept.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 button_acceptActionPerformed(evt);
+            }
+        });
+        button_accept.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                button_acceptKeyPressed(evt);
             }
         });
 
@@ -188,6 +194,10 @@ public final class user_accept_window extends javax.swing.JDialog {
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
         key_eventer(evt);
     }//GEN-LAST:event_formKeyPressed
+
+    private void button_acceptKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_button_acceptKeyPressed
+        key_eventer(evt);
+    }//GEN-LAST:event_button_acceptKeyPressed
     
     /**
      * Function for key press checking

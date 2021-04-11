@@ -8,6 +8,10 @@ package com.jakubwawak.database;
 import com.jakubwawak.entrc.BarCodeCreator;
 import com.jakubwawak.entrc.Configuration;
 import com.mysql.cj.conf.ConnectionUrlParser.Pair;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
@@ -29,6 +33,7 @@ public class Database_Connector {
     // variable for debug purposes
     final int debug = 1;
     
+    public boolean evaluation_copy;
     
     public boolean connected;                      // flag for checking connection to the database
     String ip;                              // ip data for the connector
@@ -39,7 +44,7 @@ public class Database_Connector {
     /**
      * Constructor
      */
-    public Database_Connector() throws SQLException, ClassNotFoundException{
+    public Database_Connector() throws SQLException, ClassNotFoundException, SQLException{
         con = null;
         database_log = new ArrayList<>();
         connected = false;
@@ -121,6 +126,118 @@ public class Database_Connector {
         log("Database string: "+login_data);
     }
     
+    /**
+     * Function for getting MAC addreses of the local computer
+     * @return
+     * @throws UnknownHostException
+     * @throws SocketException 
+     */
+    public String get_local_MACAddress() throws UnknownHostException, SocketException{
+        if( System.getProperty("os.name").equals("Mac OS X")){
+            return "macos - not supported";
+        }
+        else{
+            InetAddress localHost = InetAddress.getLocalHost();
+            NetworkInterface ni = NetworkInterface.getByInetAddress(localHost);
+            byte[] hardwareAddress = ni.getHardwareAddress();
+            String[] hexadecimal = new String[hardwareAddress.length];
+            for (int i = 0; i < hardwareAddress.length; i++) {
+                hexadecimal[i] = String.format("%02X", hardwareAddress[i]);
+            }
+            return String.join("-", hexadecimal);
+        }
+    }
+    
+    /**
+     * Function for comparing program license with database
+     * @param license
+     * @return Integer
+     * @throws UnknownHostException
+     * @throws SocketException 
+     * return codes:
+     *  1 - license found
+     *  0 - license not found
+     * -1 - database error
+     */
+    public int compare_licenses(String license) throws UnknownHostException, SocketException, SQLException{
+        String query = "SELECT * FROM RUNTIME WHERE runtime_macaddress = ? and "
+                + "runtime_license = ?;";
+        
+        try{
+            PreparedStatement ppst = con.prepareStatement(query);
+            
+            ppst.setString(1,get_local_MACAddress());
+            ppst.setString(2,license);
+            
+            ResultSet rs = ppst.executeQuery();
+            
+            if ( rs.next() ){
+                if ( rs.getString("runtime_license").equals("LICENSE")){
+                    evaluation_copy = true;
+                }
+                return 1;
+            }
+            return 0;
+            
+        }catch(SQLException e){
+            log("Failed to check licenses ("+e.toString()+")");
+            return -1;
+        }
+    }
+    
+    /**
+     * Function for checking lincese exixts
+     * @return int
+     */
+    public int check_license_exists() throws SQLException, UnknownHostException, SocketException{
+        String query = "SELECT * FROM RUNTIME WHERE runtime_macaddress = ?;";
+        
+        try{
+            PreparedStatement ppst = con.prepareStatement(query);
+            
+            ppst.setString(1,get_local_MACAddress());
+            
+            ResultSet rs = ppst.executeQuery();
+            
+            if ( rs.next() ){
+                return 1;
+            }
+            return 0;
+            
+        }catch(SQLException e){
+            log("Failed to check license ("+e.toString()+")");
+            return -1;
+        }
+    }
+    
+    /**
+     * Function for inserting licenses
+     * @param license
+     * @return Integer
+     * @throws SQLException
+     * @throws UnknownHostException
+     * @throws SocketException 
+     * return codes:
+     * 1 - license inserted
+     * -1 - database error
+     */
+    public int insert_license(String license) throws SQLException, UnknownHostException, SocketException{
+        String query = "INSERT INTO RUNTIME (runtime_license,runtime_macaddress)\n" +
+                        "VALUES\n" +
+                        "(?,?);";
+        
+        try{
+            PreparedStatement ppst = con.prepareStatement(query);
+            ppst.setString(1,license);
+            ppst.setString(2,get_local_MACAddress());
+            
+            ppst.execute();
+            return 1;
+        }catch(SQLException e){
+            log("Failed to insert license to database! ("+license+") ("+e.toString()+")");
+            return -1;
+        }
+    }
     /**
      * Function for getting PIN data for managing client window
      * @return ArrayList
@@ -301,7 +418,12 @@ public class Database_Connector {
         }   
     }
     
-    
+    /**
+     * Function for getting worker data by id
+     * @param id
+     * @return String
+     * @throws SQLException 
+     */
     public String get_worker_data(int id) throws SQLException{
         String query = "SELECT worker_name,worker_surname FROM WORKER where worker_id=?;";
         PreparedStatement ppst = con.prepareStatement(query);
@@ -557,7 +679,7 @@ public class Database_Connector {
             return -1;
         }  
     }
-        /**
+    /**
      * Function for getting last ENTER log id
      * @param worker_id
      * @return Integer
@@ -1270,7 +1392,7 @@ public class Database_Connector {
             ppst.setObject(1,todayLocalDate);
             ppst.setInt(2,get_worker_id_bypin(to_set.worker_pin));
             to_set.generate_barcode();
-            ppst.setString(3,to_set.barcode_object.toString());
+            //ppst.setString(3,to_set.barcode_object.toString());
             
             ppst.execute();
             return true;

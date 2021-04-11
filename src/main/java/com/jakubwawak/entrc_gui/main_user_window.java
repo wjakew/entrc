@@ -24,16 +24,18 @@ public class main_user_window extends javax.swing.JFrame {
      */
     Database_Connector database;
     String version;
-    public main_user_window(Database_Connector database,String version) throws UnknownHostException, SocketException, SocketException {
+    public main_user_window(Database_Connector database,String version,int debug) throws UnknownHostException, SocketException, SocketException {
         this.version = version;
         this.setTitle("ENTRC APP "+version);
         this.database = database;
-        this.setUndecorated(true);
+        if ( debug == 0)
+            this.setUndecorated(true);
         initComponents();
         
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         setResizable(false);
         getContentPane().setBackground(Color.BLACK);
+        textfield_pin.requestFocus();
         setVisible(true);
 }
     /**
@@ -322,16 +324,19 @@ public class main_user_window extends javax.swing.JFrame {
                     // pin reset invoked
                     new reset_pin_window(this,true,database);
                     textfield_pin.setText("");
+                    textfield_pin.requestFocus();
                 }
                 else if ( database.check_managecode(pin) == 1){
                     // manage users window invoked
                     new manage_workers_window(this,true,database);
                     textfield_pin.setText("");
+                    textfield_pin.requestFocus();
                 }
                 else if ( database.check_admincode(pin) == 1){
                     // manage pin window invoked
                     new admin_pin_reset_window(this,true,database);
                     textfield_pin.setText("");
+                    textfield_pin.requestFocus();
                 }
                 else if ( database.check_showipcode(pin) == 1){
                     try {
@@ -345,6 +350,7 @@ public class main_user_window extends javax.swing.JFrame {
                         textfield_pin.setText("");
                     }
                     textfield_pin.setText("");
+                    textfield_pin.requestFocus();
                 }
                 else{
                     // here we know that user pin is entered
@@ -356,12 +362,14 @@ public class main_user_window extends javax.swing.JFrame {
                         database.log_LOGIN_ACCEPT(pin);         // LOGIN_ACCEPT EVENT
                         new user_accept_window(this,true,database,user);
                         textfield_pin.setText("");
+                        textfield_pin.requestFocus();
                     }
                     else{
                         //user set wrong pin
                         button_submit.setText("BŁĘDNY PIN");
                         database.log_LOGIN_FAILED(pin);         // LOGIN_FAILED EVENT
                         textfield_pin.setText("");
+                        textfield_pin.requestFocus();
                     }
                 }                
                 
