@@ -391,6 +391,33 @@ public class Database_Connector {
     }
     
     /**
+     * Function for getting worker pin by given id
+     * @param worker_id
+     * @return String
+     * @throws SQLException 
+     */
+    private String get_worker_PIN_byid(int worker_id) throws SQLException{
+        String query = "SELECT worker_pin FROM WORKER WHERE worker_id = ?;";
+        
+        try{
+            log("Invoked private function for getting worker PIN ");
+            PreparedStatement ppst = con.prepareStatement(query);
+            
+            ppst.setInt(1,worker_id);
+            
+            ResultSet rs = ppst.executeQuery();
+            
+            if(rs.next()){
+                return rs.getString("worker_pin");
+            }
+            return "blank";
+        }catch(SQLException e){
+            log("Failed to get worker pin by given id ("+worker_id+") ("+e.toString()+")");
+            return null;
+        }
+    }
+    
+    /**
      * Function for getting worker name and surname
      * @param pin
      * @return String
@@ -706,6 +733,33 @@ public class Database_Connector {
         }catch(SQLException e){
             log("Failed to get last id of USER_LOG table ("+e.toString());
             return -1;
+        }
+    }
+    
+    /**
+     * Function for getting worker pin by given id
+     * @param barcode
+     * @return String 
+     * @throws SQLException 
+     */
+    public String get_worker_pin_by_barcode(String barcode) throws SQLException{
+        String query = "SELECT WORKER_ID FROM BARCODE_DATA WHERE BARCODE_RAW_DATA = ?;";
+        
+        try{
+            log("Tying to find WORKER PIN by given barcode |"+barcode+"|");
+            PreparedStatement ppst = con.prepareStatement(query);
+            ppst.setString(1,barcode);
+            
+            ResultSet rs = ppst.executeQuery();
+            
+            if (rs.next()){
+                int worker_id = rs.getInt("worker_id");
+                return this.get_worker_PIN_byid(worker_id);
+            }
+            return "blank";
+        }catch(SQLException e){
+            log("Failed to get worker pin by barcode: |"+barcode+"|");
+            return null;
         }
     }
     

@@ -353,8 +353,22 @@ public class main_user_window extends javax.swing.JFrame {
                     textfield_pin.requestFocus();
                 }
                 else{
+                    Guard user;
+                    // checking if BARCODE inserted
+                    if ( database.get_worker_pin_by_barcode(textfield_pin.getText()) != null ){
+                        if ( !database.get_worker_pin_by_barcode(textfield_pin.getText()).equals("blank") ){
+                            database.log("Worker is logging using barcode");
+                            user = new Guard(database.get_worker_pin_by_barcode(textfield_pin.getText()),database);
+                        }
+                        else{
+                            user = new Guard(textfield_pin.getText(),database);
+                        }
+                    }
+                    else{
+                        user = new Guard(textfield_pin.getText(),database);
+                    }
                     // here we know that user pin is entered
-                    Guard user = new Guard(textfield_pin.getText(),database);
+                    
                     user.check_credentials();       // checking credentials
                     
                     if ( user.accepted == 1 ){
