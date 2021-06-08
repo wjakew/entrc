@@ -8,6 +8,8 @@ package com.jakubwawak.entrc;
 import com.jakubwawak.database.Database_Connector;
 import com.jakubwawak.entrc_gui.main_user_window;
 import com.itextpdf.text.DocumentException;
+import com.jakubwawak.database.Database_ProgramCodes;
+import com.jakubwawak.entrc_gui.main_user_ANC_window;
 import com.jakubwawak.entrc_gui.message_window;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,7 +27,7 @@ import java.util.Scanner;
  */
 public class Entrc {
     
-    final static String version = "v1.0.4";
+    final static String version = "v1.1.0";
     static Configuration run_configuration;
     static Database_Connector database;
     static Scanner user_handler;
@@ -64,8 +66,34 @@ public class Entrc {
                         new message_window(null,true,"Dziękujemy za dodanie licencji programu Entrc Client");
                     }
                     //end of RuntimeChecker
+                    
+                    try{
+                        Database_ProgramCodes dpc = new Database_ProgramCodes(database);
+                        
+                        String code = dpc.get_value("CLIENTSTARTUP");
+                        
+                        switch(code){
+                            case "NORMAL":
+                                database.log("NORMAL VIEW MODE INVOKED");
+                                new main_user_window(database,version,debug_window);
+                                break;
+                            case "ANC_ADD":
+                                database.log("ANNOUNCEMENT VIEW MODE INVOKED");
+                                new main_user_ANC_window(database,version,debug_window);
+                                break;
+                            default:
+                                new message_window(null,true,"Błąd na bazie: 000");
+                                new main_user_window(database,version,debug_window);
+                                break;
+                        }
+                    
+                    }catch(Exception e){
+                        new message_window(null,true,"Save mode activated...");
+                        new main_user_window(database,version,debug_window);
+                    }
+                    
 
-                    new main_user_window(database,version,debug_window);
+                    
                 }
                 else{
                     System.out.println("Błąd połączenia z bazą danych. Skontaktuj się z administratorem");

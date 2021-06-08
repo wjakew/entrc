@@ -25,7 +25,7 @@ public class programinfo_window extends javax.swing.JDialog {
         initComponents();
         label_ip.setText("ip address: "+get_IP_data());
         label_version.setText("Version: "+version);
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
 
