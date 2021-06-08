@@ -11,6 +11,7 @@ USE entrc_database;
 drop table if exists PROGRAM_LOG;
 drop table if exists ERROR_LOG;
 drop table if exists RUNTIME;
+drop table if exists ENTRC_API_DATA;
 drop table if exists CONFIGURATION;
 drop table if exists USER_MESSAGE;
 drop table if exists ENTRANCE_EXIT;
@@ -20,6 +21,7 @@ drop table if exists DATA_LOG;
 drop table if exists GRAVEYARD;
 drop table if exists ADMIN_GRAVEYARD;
 drop table if exists ADMIN_PRIVILAGES;
+drop table if exists ANNOUNCEMENT;
 drop table if exists ADMIN_DATA;
 drop table if exists BARCODE_DATA;
 drop table if exists WORKER;
@@ -43,7 +45,14 @@ runtime_id INT PRIMARY KEY AUTO_INCREMENT,
 runtime_license VARCHAR(19),
 runtime_macaddress VARCHAR(50)
 );
--- table for stoing configuration data
+-- table for storing entrc_api data
+CREATE TABLE ENTRC_API_DATA
+(
+entrc_api_data INT PRIMARY KEY AUTO_INCREMENT,
+entrc_api_appcode VARCHAR(10),
+entrc_api_desc VARCHAR(100)
+);
+-- table for storing configuration data
 CREATE TABLE CONFIGURATION
 (
 entrc_user_exit_pin VARCHAR(10),
@@ -80,6 +89,16 @@ admin_password VARCHAR(150),
 admin_email VARCHAR(50),
 admin_level INT,
 admin_active INT
+);
+-- table for setting announcments
+CREATE TABLE ANNOUNCEMENT
+(
+announcement_id INT PRIMARY KEY AUTO_INCREMENT,
+announcement_update TIMESTAMP,
+announcement_data TEXT,
+admin_id INT,
+
+CONSTRAINT fk_announcment FOREIGN KEY (admin_id) REFERENCES ADMIN_DATA(admin_id)
 );
 -- table for storing privilages for admin access
 CREATE TABLE ADMIN_PRIVILAGES
