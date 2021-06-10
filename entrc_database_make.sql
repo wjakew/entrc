@@ -2,12 +2,13 @@
 programmer Jakub Wawak
 all rights reserved
 kubawawak@gmail.com
-version (from schema) v1.0.0
+version v1.1.1
 sql script that reloads ENTRC database
 */	
 USE entrc_database;
 
 -- checking if old data is on the database 
+drop table if exists PROGRAMCODES;
 drop table if exists PROGRAM_LOG;
 drop table if exists ERROR_LOG;
 drop table if exists RUNTIME;
@@ -26,6 +27,13 @@ drop table if exists ADMIN_DATA;
 drop table if exists BARCODE_DATA;
 drop table if exists WORKER;
 
+-- table fro storing data for future use
+CREATE TABLE PROGRAMCODES
+(
+programcodes_id INT PRIMARY KEY AUTO_INCREMENT,
+programcodes_key VARCHAR(50),
+programcodes_value VARCHAR(100)
+);
 -- table for stroing program log
 CREATE TABLE PROGRAM_LOG
 (
@@ -201,3 +209,13 @@ INSERT INTO ADMIN_DATA
 (admin_login,admin_password,admin_level,admin_email,admin_active)
 VALUES
 ("admin","21232f297a57a5a743894a0e4a801fc3",1,"",1);
+-- setting normal startup sequenceprogramcodesprogramcodes
+INSERT INTO PROGRAMCODES
+(programcodes_key,programcodes_value)
+VALUES
+("CLIENTSTARTUP","NORMAL");
+-- setting 
+INSERT INTO PROGRAMCODES
+(programcodes_key,programcodes_value)
+VALUES
+("DATABASEVERSION","111");
