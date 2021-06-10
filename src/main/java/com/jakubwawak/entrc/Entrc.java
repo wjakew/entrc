@@ -27,7 +27,8 @@ import java.util.Scanner;
  */
 public class Entrc {
     
-    final static String version = "v1.1.0";
+    final static String version = "v1.1.1";
+    final static String databaseversion = "111";
     static Configuration run_configuration;
     static Database_Connector database;
     static Scanner user_handler;
@@ -59,7 +60,7 @@ public class Entrc {
                         new message_window(null,true,"Ta kopia programu jest wersją testową.");
                     }
                     if (!rtc.validate_flag ){
-                        new message_window(null,true,"Błędne sprawdzanie licencji programu. Skontaktuj się z administratorem");
+                        new message_window(null,true,"Błędne sprawdzanie licencji programu. Skontaktuj się z administratorem. MAC: "+database.get_local_MACAddress());
                         System.exit(0);
                     }
                     if (rtc.first_run ){
@@ -67,8 +68,16 @@ public class Entrc {
                     }
                     //end of RuntimeChecker
                     
-                    try{
-                        Database_ProgramCodes dpc = new Database_ProgramCodes(database);
+                    Database_ProgramCodes dpc = new Database_ProgramCodes(database);
+                    if ( !dpc.get_value("DATABASEVERSION").equals(databaseversion)){
+                        database.log("Database version not match");
+                        new message_window(null,true,"Bład wersji bazy danych\n Wersja na maszynie jest zła."
+                                + "\n Prośba o kontakt z administratorem\n"
+                                + "Wymagana wersja: "+databaseversion);
+                        System.exit(0);
+                    }
+                    database.log("Database version is correct");
+                    try{   
                         
                         String code = dpc.get_value("CLIENTSTARTUP");
                         
@@ -91,9 +100,6 @@ public class Entrc {
                         new message_window(null,true,"Save mode activated...");
                         new main_user_window(database,version,debug_window);
                     }
-                    
-
-                    
                 }
                 else{
                     System.out.println("Błąd połączenia z bazą danych. Skontaktuj się z administratorem");
