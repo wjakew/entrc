@@ -22,10 +22,11 @@ public class admin_pin_reset_window extends javax.swing.JDialog {
      * Creates new form admin_pin_reset_window
      */
     Database_Connector database;
-    
-    public admin_pin_reset_window(java.awt.Frame parent, boolean modal,Database_Connector database) throws SQLException {
+    String version;
+    public admin_pin_reset_window(java.awt.Frame parent, boolean modal,Database_Connector database,String version) throws SQLException {
         super(parent, modal);
         this.database = database;
+        this.version = version;
         initComponents();
         load_window();
         this.setLocationRelativeTo(null);
@@ -148,7 +149,7 @@ public class admin_pin_reset_window extends javax.swing.JDialog {
     }//GEN-LAST:event_button_saveActionPerformed
 
     private void button_optionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_optionsActionPerformed
-        new options_window(this,true,database);
+        new options_window(this,true,database,version);
     }//GEN-LAST:event_button_optionsActionPerformed
 
     /**

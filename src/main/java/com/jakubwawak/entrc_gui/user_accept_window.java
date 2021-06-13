@@ -7,6 +7,8 @@ package com.jakubwawak.entrc_gui;
 
 import com.github.sarxos.webcam.Webcam;
 import com.jakubwawak.database.Database_Connector;
+import com.jakubwawak.database.Database_Photo;
+import com.jakubwawak.database.Database_ProgramCodes;
 import com.jakubwawak.entrc.Guard;
 import com.mysql.cj.conf.ConnectionUrlParser.Pair;
 import java.awt.Color;
@@ -276,6 +278,24 @@ public final class user_accept_window extends javax.swing.JDialog {
                 File photo_file = new File(create_path_name()+photo_name);
                 ImageIO.write(webcam.getImage(), "PNG", photo_file);
 
+                Database_ProgramCodes dpc = new Database_ProgramCodes(database);
+                
+                if ( dpc.get_value("PHOTOSAVE").equals("YES")){
+                    database.log("PHOTOSAVE = YES - trying to save photo on database");
+                    
+                    Database_Photo dp = new Database_Photo(database);
+                    int code = dp.load_photo(database.get_worker_id_bypin(user.pin), photo_file.getAbsolutePath(), photo_name);
+                    
+                    switch(code){
+                        case 1:
+                            database.log("Successfully loaded picture to the database");
+                            break;
+                        default:
+                            database.log("Something went wrong... Cannot load picture to database");
+                            break;
+                    }
+                }
+                
                 return photo_file.getAbsolutePath();
             
             }catch(Exception e){

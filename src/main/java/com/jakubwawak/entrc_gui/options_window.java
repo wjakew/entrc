@@ -22,10 +22,11 @@ public class options_window extends javax.swing.JDialog {
      */
     Database_Connector database;
     
-    public options_window(javax.swing.JDialog parent, boolean modal,Database_Connector database) {
+    public options_window(javax.swing.JDialog parent, boolean modal,Database_Connector database,String version) {
         super(parent, modal);
         this.database = database;
         initComponents();
+        label_version.setText(version);
         this.setLocationRelativeTo(null);
         setVisible(true);
     }
@@ -42,7 +43,7 @@ public class options_window extends javax.swing.JDialog {
         send_log_button = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        label_version = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Opcje programu");
@@ -58,7 +59,7 @@ public class options_window extends javax.swing.JDialog {
 
         jLabel2.setText("kubawawak@gmail.com");
 
-        jLabel3.setText("v1.0.3");
+        label_version.setText("v1.0.3");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -70,7 +71,7 @@ public class options_window extends javax.swing.JDialog {
                     .addComponent(send_log_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel3)))
+                        .addComponent(label_version)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 128, Short.MAX_VALUE)
@@ -91,7 +92,7 @@ public class options_window extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
+                .addComponent(label_version)
                 .addContainerGap())
         );
 
@@ -129,7 +130,7 @@ public class options_window extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel label_version;
     private javax.swing.JButton send_log_button;
     // End of variables declaration//GEN-END:variables
 }

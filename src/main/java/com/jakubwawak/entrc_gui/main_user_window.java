@@ -352,7 +352,7 @@ public class main_user_window extends javax.swing.JFrame {
                 }
                 else if ( database.check_admincode(pin) == 1){
                     // manage pin window invoked
-                    new admin_pin_reset_window(this,true,database);
+                    new admin_pin_reset_window(this,true,database,version);
                     textfield_pin.setText("");
                     textfield_pin.requestFocus();
                 }
