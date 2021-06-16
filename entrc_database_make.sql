@@ -2,7 +2,7 @@
 programmer Jakub Wawak
 all rights reserved
 kubawawak@gmail.com
-version v1.2.0
+version v1.2.1
 sql script that reloads ENTRCruntime database
 */	
 USE entrc_database;
@@ -11,6 +11,7 @@ USE entrc_database;
 drop table if exists PROGRAMCODES;
 drop table if exists PROGRAM_LOG;
 drop table if exists ERROR_LOG;
+drop table if exists CONSOLE;
 drop table if exists RUNTIME;
 drop table if exists ENTRC_API_DATA;
 drop table if exists CONFIGURATION;
@@ -109,6 +110,14 @@ admin_password VARCHAR(150),
 admin_email VARCHAR(50),
 admin_level INT,
 admin_active INT
+);
+-- table for storing console data
+CREATE TABLE CONSOLE
+(
+console_id INT PRIMARY KEY AUTO_INCREMENT,
+console_key VARCHAR(40),
+console_value VARCHAR(40),
+console_time TIMESTAMP
 );
 -- table for setting announcments
 CREATE TABLE ANNOUNCEMENT
@@ -233,4 +242,4 @@ VALUES
 INSERT INTO PROGRAMCODES
 (programcodes_key,programcodes_value)
 VALUES
-("DATABASEVERSION","120");
+("DATABASEVERSION","121");
