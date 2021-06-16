@@ -6,9 +6,12 @@ all rights reserved
 package com.jakubwawak.entrc;
 
 import com.jakubwawak.database.Database_Connector;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
+import java.util.Scanner;
 
 /**
  *Object for checking run enviroment
@@ -17,11 +20,12 @@ import java.sql.SQLException;
 public class RuntimeChecker {
     
     String current_macaddress;
-    final String LICENSE_KEY = "LICENSE";
+    String LICENSE_KEY = "";
     
     boolean validate_flag;
     boolean directory_tree_flag;
     boolean first_run;
+    public boolean license_load;
     /**
      * Scenario:
      * 
@@ -43,19 +47,32 @@ public class RuntimeChecker {
     public RuntimeChecker(){
         System.out.println("Runtime checker invoked..");
         current_macaddress = "";
+        license_load = false;
     }
     
     /**
-     * Function for setup new license on database where program is running for the first time
-     * @param database
-     * @throws SQLException
-     * @throws UnknownHostException
-     * @throws SocketException 
+     * Function for loading licenses from file
+     * @throws FileNotFoundException 
      */
-    private void setup_new_license(Database_Connector database) throws SQLException, UnknownHostException, SocketException{
-        database.insert_license(LICENSE_KEY);
+    void load_license() throws FileNotFoundException{
+        String path = "license.txt";
+        
+        try{
+            File fr = new File(path);
+            Scanner sc = new Scanner(fr);
+            
+            if (sc.hasNextLine()){
+                LICENSE_KEY = sc.nextLine();
+            }
+            
+            System.out.println("Loaded LICENSE_KEY: "+LICENSE_KEY);
+            license_load = true;
+        }catch(Exception e){
+            System.out.println("Failed to open license file. ("+e.toString()+")");
+            license_load = false;
+        }
+        
     }
-    
     /**
      * Function for running before run scenario
      */
@@ -67,10 +84,10 @@ public class RuntimeChecker {
      * Function for running after run scenario
      * @param database 
      */
-    void after_check(Database_Connector database) throws UnknownHostException, SocketException, SQLException{
+    void after_check(Database_Connector database) throws UnknownHostException, SocketException, SQLException, FileNotFoundException{
         System.out.println("Running after check..");
         current_macaddress = database.get_local_MACAddress();
-        
+        load_license();
         if ( database.compare_licenses(LICENSE_KEY) == 1 ){
             System.out.println("License key compared succesfully");
             if ( database.evaluation_copy ){
@@ -82,12 +99,6 @@ public class RuntimeChecker {
             if ( database.check_license_exists() == 1){
                 System.out.println("License key comparation failed");
                 validate_flag = false;
-            }
-            else if ( database.check_license_exists() == 0){
-                System.out.println("RunetimeChecker validation_flag is true");
-                validate_flag = true;
-                first_run = true;
-                setup_new_license(database);
             }
             else{
                 System.out.println("RunetimeChecker failed to validate copy");

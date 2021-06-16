@@ -27,8 +27,8 @@ import java.util.Scanner;
  */
 public class Entrc {
     
-    final static String version = "v1.2.0";
-    final static String databaseversion = "120";
+    final static String version = "v1.2.1";
+    final static String databaseversion = "121";
     static Configuration run_configuration;
     static Database_Connector database;
     static Scanner user_handler;
@@ -60,11 +60,11 @@ public class Entrc {
                         new message_window(null,true,"Ta kopia programu jest wersją testową.");
                     }
                     if (!rtc.validate_flag ){
-                        new message_window(null,true,"Błędne sprawdzanie licencji programu. Skontaktuj się z administratorem. MAC: "+database.get_local_MACAddress());
+                        if ( !rtc.license_load ){
+                            new message_window(null,true,"Błąd podczas odczytu licencj");
+                        }
+                        new message_window(null,true,"Błędne sprawdzanie licencji programu. \nSkontaktuj się z administratorem. \nMAC: "+database.get_local_MACAddress());
                         System.exit(0);
-                    }
-                    if (rtc.first_run ){
-                        new message_window(null,true,"Dziękujemy za dodanie licencji programu Entrc Client");
                     }
                     //end of RuntimeChecker
                     
@@ -173,7 +173,7 @@ public class Entrc {
                         "|_____|_| \\_| |_| |_| \\_\\\\____|";
         String addons = " VERSION: "+version + "   Jakub Wawak\n\n";
         addons = addons +"BUILD INFORMATION:\n";
-        addons = addons +"build date: 11.04.2020\n";
+        addons = addons +"build date: 16.06.2021\n";
         addons = addons +"machine local IP:"+get_IP_data()+"\n";
         System.out.println(banner);
         System.out.print(addons);

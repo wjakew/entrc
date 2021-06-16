@@ -172,7 +172,7 @@ public class Database_Connector {
             ResultSet rs = ppst.executeQuery();
             
             if ( rs.next() ){
-                if ( rs.getString("runtime_license").equals("LICENSE")){
+                if ( rs.getString("runtime_license").contains("LICENSE")){
                     evaluation_copy = true;
                 }
                 return 1;
