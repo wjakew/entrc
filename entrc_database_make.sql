@@ -2,8 +2,8 @@
 programmer Jakub Wawak
 all rights reserved
 kubawawak@gmail.com
-version v1.1.1
-sql script that reloads ENTRC database
+version v1.2.1
+sql script that reloads ENTRCruntime database
 */	
 USE entrc_database;
 
@@ -11,6 +11,7 @@ USE entrc_database;
 drop table if exists PROGRAMCODES;
 drop table if exists PROGRAM_LOG;
 drop table if exists ERROR_LOG;
+drop table if exists CONSOLE;
 drop table if exists RUNTIME;
 drop table if exists ENTRC_API_DATA;
 drop table if exists CONFIGURATION;
@@ -25,6 +26,7 @@ drop table if exists ADMIN_PRIVILAGES;
 drop table if exists ANNOUNCEMENT;
 drop table if exists ADMIN_DATA;
 drop table if exists BARCODE_DATA;
+drop table if exists PHOTO_LIB;
 drop table if exists WORKER;
 
 -- table fro storing data for future use
@@ -79,6 +81,17 @@ worker_surname VARCHAR(100),
 worker_pin VARCHAR(4),
 worker_position VARCHAR(20)
 );
+-- table for storing photos
+CREATE TABLE PHOTO_LIB
+(
+photo_lib_id INT PRIMARY KEY AUTO_INCREMENT,
+worker_id INT,
+photo_path VARCHAR(350),
+photo_name VARCHAR(100),
+photo_source BLOB,
+
+CONSTRAINT fk_photolib FOREIGN KEY (worker_id) REFERENCES WORKER(worker_id)
+);
 -- table for storing log for barcodes
 CREATE TABLE BARCODE_DATA
 (
@@ -97,6 +110,14 @@ admin_password VARCHAR(150),
 admin_email VARCHAR(50),
 admin_level INT,
 admin_active INT
+);
+-- table for storing console data
+CREATE TABLE CONSOLE
+(
+console_id INT PRIMARY KEY AUTO_INCREMENT,
+console_key VARCHAR(40),
+console_value VARCHAR(40),
+console_time TIMESTAMP
 );
 -- table for setting announcments
 CREATE TABLE ANNOUNCEMENT
@@ -155,7 +176,7 @@ user_log_date TIMESTAMP,
 worker_id INT,
 user_log_action VARCHAR(20),
 user_log_desc VARCHAR(100),
-user_log_photo_src VARCHAR(200),
+user_log_photo_src VARCHAR(350),
 
 CONSTRAINT fk_userlog1 FOREIGN KEY (worker_id) REFERENCES WORKER(worker_id)
 );
@@ -214,8 +235,11 @@ INSERT INTO PROGRAMCODES
 (programcodes_key,programcodes_value)
 VALUES
 ("CLIENTSTARTUP","NORMAL");
--- setting 
 INSERT INTO PROGRAMCODES
 (programcodes_key,programcodes_value)
 VALUES
-("DATABASEVERSION","111");
+("PHOTOSAVE","NO");
+INSERT INTO PROGRAMCODES
+(programcodes_key,programcodes_value)
+VALUES
+("DATABASEVERSION","121");
