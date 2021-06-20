@@ -27,8 +27,8 @@ import java.util.Scanner;
  */
 public class Entrc {
     
-    final static String version = "v1.2.1";
-    final static String databaseversion = "121";
+    final static String version = "v1.2.2";
+    final static int databaseversion = 121;
     static Configuration run_configuration;
     static Database_Connector database;
     static Scanner user_handler;
@@ -69,14 +69,27 @@ public class Entrc {
                     //end of RuntimeChecker
                     
                     Database_ProgramCodes dpc = new Database_ProgramCodes(database);
-                    if ( !dpc.get_value("DATABASEVERSION").equals(databaseversion)){
-                        database.log("Database version not match");
-                        new message_window(null,true,"Bład wersji bazy danych\n Wersja na maszynie jest zła."
+                    
+                    switch( dpc.check_database_version(databaseversion)){
+                        case 0:
+                            database.log("Database version not match");
+                            new message_window(null,true,"Bład wersji bazy danych\n Wersja na maszynie jest zła."
                                 + "\n Prośba o kontakt z administratorem\n"
                                 + "Wymagana wersja: "+databaseversion);
-                        System.exit(0);
+                            System.exit(0);
+                            break;
+                        case 2:
+                            database.log("Database version is correct");
+                            break;
+                        case 1:
+                            new message_window(null,true,"Wersja bazy jest nowsza niż aplikacji, sprawdź czy nie ma aktualizacji");
+                            break;
+                        case -1:
+                            new message_window(null,true,"Błąd sprawdzania wersji bazy danych");
+                            System.exit(0);
+                            break;
                     }
-                    database.log("Database version is correct");
+                    
                     try{   
                         
                         String code = dpc.get_value("CLIENTSTARTUP");

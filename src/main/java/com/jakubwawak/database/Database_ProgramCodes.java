@@ -25,6 +25,31 @@ public class Database_ProgramCodes {
         this.database = database;
     }
     
+    /**
+     * Function for checking database version
+     * @return int
+     * return codes:
+     * 1 - database version newer but still accepted
+     * 2 - database version is the same as implemented
+     * 0 - database version not match - too old
+     * -1 - database check error
+     */
+    public int check_database_version(int version) throws SQLException{
+        String loaded_version = get_value("DATABASEVERSION");
+        try{
+            int database_version = Integer.parseInt(loaded_version);
+            if ( database_version > version)
+                return 1;
+            if ( database_version == version){
+                return 2;
+            }
+            return 0;
+        }catch(Exception e){
+            database.log("Failed to check database version ("+e.toString()+")");
+            return -1;
+        }
+    }
+    
     
     /**
      * Function for checking if key exists
