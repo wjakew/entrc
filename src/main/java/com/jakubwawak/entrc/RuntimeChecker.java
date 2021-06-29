@@ -55,7 +55,7 @@ public class RuntimeChecker {
      * @throws FileNotFoundException 
      */
     void load_license() throws FileNotFoundException{
-        String path = "license.txt";
+        String path = "entrclient.license";
         
         try{
             File fr = new File(path);

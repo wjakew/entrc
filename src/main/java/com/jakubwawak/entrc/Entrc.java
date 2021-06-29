@@ -27,8 +27,8 @@ import java.util.Scanner;
  */
 public class Entrc {
     
-    final static String version = "v1.2.2";
-    final static int databaseversion = 121;
+    final static String version = "v1.2.3";
+    final static int databaseversion = 124;
     static Configuration run_configuration;
     static Database_Connector database;
     static Scanner user_handler;
@@ -43,7 +43,7 @@ public class Entrc {
         }
 	create_banner();
         database = new Database_Connector();
-        run_configuration = new Configuration("config.txt");
+        run_configuration = new Configuration("config.entrconf");
         user_handler = new Scanner(System.in);
         
 
@@ -61,9 +61,10 @@ public class Entrc {
                     }
                     if (!rtc.validate_flag ){
                         if ( !rtc.license_load ){
-                            new message_window(null,true,"Błąd podczas odczytu licencj");
+                            new message_window(null,true,"Błąd podczas odczytu licencji");
                         }
-                        new message_window(null,true,"Błędne sprawdzanie licencji programu. \nSkontaktuj się z administratorem. \nMAC: "+database.get_local_MACAddress());
+                        new message_window(null,true,"Błędne sprawdzanie licencji programu. \nSkontaktuj się z administratorem. \nMAC: "+database.get_local_MACAddress()
+                        +"\n licencja powinna być zapisana w pliku entrclient.license");
                         System.exit(0);
                     }
                     //end of RuntimeChecker

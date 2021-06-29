@@ -47,7 +47,7 @@ public final class Configuration {
     }
     // Constructor without arguments
     Configuration() throws IOException{
-        file_src = "config.txt";
+        file_src = "config.entrconf";
         file_lines = new ArrayList<>();
         System.out.println("\nZainicjalizowano bez sciezki");
     }

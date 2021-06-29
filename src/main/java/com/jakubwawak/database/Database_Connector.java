@@ -24,7 +24,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Database_Connector {
     
     // version of database 
-    final String version = "vC.0.7";
+    final String version = "vC.0.8";
     // header for logging data
     // connection object for maintaing connection to the database
     Connection con;
