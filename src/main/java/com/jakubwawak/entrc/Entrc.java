@@ -27,7 +27,7 @@ import java.util.Scanner;
  */
 public class Entrc {
     
-    final static String version = "v1.2.3";
+    final static String version = "v1.2.4";
     final static int databaseversion = 124;
     static Configuration run_configuration;
     static Database_Connector database;

@@ -1285,7 +1285,8 @@ public class Database_Connector {
      * @throws SQLException 
      */
     public String check_message(int worker_id) throws SQLException{
-        String query = "SELECT user_message_content FROM USER_MESSAGE where worker_id = ? or worker_id = 1 and user_message_seen = 0;";
+        String message = "";
+        String query = "SELECT user_message_content FROM USER_MESSAGE where worker_id = ? and user_message_seen = 0;";
         PreparedStatement ppst = con.prepareStatement(query);
         ppst.setInt(1, worker_id);
         
@@ -1293,10 +1294,14 @@ public class Database_Connector {
             
             ResultSet rs = ppst.executeQuery();
             
-            if ( rs.next() ){
-                return rs.getString("user_message_content");
+            while( rs.next() ){
+                message = message + rs.getString("user_message_content") +"\n";
             }
-            return null;
+            
+            if ( message.equals("")){
+                return null;
+            }
+            return message;
         }
         catch(SQLException e){
             log("Failed to get message to user: "+e.toString());
