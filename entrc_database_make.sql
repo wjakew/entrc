@@ -2,7 +2,7 @@
 programmer Jakub Wawak
 all rights reserved
 kubawawak@gmail.com
-version v1.2.4
+version v1.3.0
 sql script that reloads ENTRCruntime database
 */	
 USE entrc_database;
@@ -13,6 +13,11 @@ drop table if exists ENTRC_IC_ITEM;
 drop table if exists ENTRC_IC_DRAWER_LABEL;
 drop table if exists ENTRC_IC_DRAWER;
 drop table if exists ENTRC_IC_CATEGORY;
+drop table if exists ENTRC_GUARD_ENTRANCE;
+drop table if exists ENTRC_GUARD_LOG;
+drop table if exists ENTRC_GUARD_USER;
+drop table if exists ENTRC_GUARD_NUMBERPLATES;
+drop table if exists ENTRC_GUARD_TIMESHEET;
 drop table if exists PROGRAMCODES;
 drop table if exists PROGRAM_LOG;
 drop table if exists ERROR_LOG;
@@ -320,6 +325,53 @@ entrc_ic_log_objectid INT,
 entrc_ic_log_desc VARCHAR(300),
 entrc_ic_log_time TIMESTAMP
 );
+-- ########################## ENTRC GUARD TABLES
+-- table for creating timetables for entrance
+CREATE TABLE ENTRC_GUARD_TIMESHEET
+(
+entrc_guard_timesheet INT PRIMARY KEY AUTO_INCREMENT,
+entrc_guard_name VARCHAR(100),
+entrc_guard_daycodes VARCHAR(7),
+entrc_guard_starttime VARCHAR(5),
+entrc_guard_endtime VARCHAR(5)
+);
+-- table for creating storage for numberplates
+CREATE TABLE ENTRC_GUARD_NUMBERPLATES
+(
+entrc_guard_numberplates_id INT PRIMARY KEY AUTO_INCREMENT,
+entrc_guard_numberplates_data VARCHAR(10),
+entrc_guard_numberplates_time TIMESTAMP,
+entrc_guard_numberplates_desc VARCHAR(250)
+);
+-- table for creating link betweeen numberplates and users
+CREATE TABLE ENTRC_GUARD_USER
+(
+entrc_guard_user_id INT PRIMARY KEY AUTO_INCREMENT,
+entrc_guard_numberplates_id INT,
+entrc_guard_user_category INT,
+user_id INT,
+
+CONSTRAINT fk_entrcguard FOREIGN KEY (entrc_guard_numberplates_id) REFERENCES ENTRC_GUARD_NUMBERPLATES(entrc_guard_numberplates_id)
+);
+-- table for logging data
+CREATE TABLE ENTRC_GUARD_LOG
+(
+entrc_guard_log_id INT PRIMARY KEY AUTO_INCREMENT,
+entrc_guard_log_code VARCHAR(200),
+entrc_guard_user_id INT,
+entrc_guard_log_desc VARCHAR(330),
+entrc_guard_log_photo BLOB,
+entrc_guard_log_time TIME
+);
+-- table for setting entrances for cars
+CREATE TABLE ENTRC_GUARD_ENTRANCE
+(
+entrc_guard_numberplates_id INT,
+entrc_guard_timesheet INT,
+
+CONSTRAINT fk_entrcguardentrance FOREIGN KEY (entrc_guard_numberplates_id) REFERENCES ENTRC_GUARD_NUMBERPLATES(entrc_guard_numberplates_id),
+CONSTRAINT fk_entrcguardentrance2 FOREIGN KEY (entrc_guard_timesheet) REFERENCES ENTRC_GUARD_TIMESHEET(entrc_guard_timesheet)
+);
 -- creating empty worker
 INSERT INTO WORKER
 (worker_login,worker_name,worker_surname,worker_pin,worker_position)
@@ -359,4 +411,8 @@ VALUES
 INSERT INTO PROGRAMCODES
 (programcodes_key,programcodes_value)
 VALUES
-("DATABASEVERSION","124");
+("API_ENABLED","FALSE");
+INSERT INTO PROGRAMCODES
+(programcodes_key,programcodes_value)
+VALUES
+("DATABASEVERSION","130");
