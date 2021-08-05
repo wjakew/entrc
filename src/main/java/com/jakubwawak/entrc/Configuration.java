@@ -30,15 +30,15 @@ public final class Configuration {
     BufferedReader file_reader;
     
     // file data in variables
-    String ip, database, databaseuser,databasepass;
+    public String ip, database, databaseuser,databasepass;
     
-    boolean ex_flag;
-    boolean prepared;
+    public boolean ex_flag;
+    public boolean prepared;
     
     ArrayList<String> file_lines;
     
     //Constructor
-    Configuration(String configuration_src) throws FileNotFoundException, IOException, URISyntaxException{
+    public Configuration(String configuration_src) throws FileNotFoundException, IOException, URISyntaxException{
         file_src = configuration_src;
         file_lines = new ArrayList<>();
         System.out.println("\nWyszukiwanie konfiguracji w:");
@@ -46,7 +46,7 @@ public final class Configuration {
         run();
     }
     // Constructor without arguments
-    Configuration() throws IOException{
+    public Configuration() throws IOException{
         file_src = "config.entrconf";
         file_lines = new ArrayList<>();
         System.out.println("\nZainicjalizowano bez sciezki");
@@ -55,8 +55,8 @@ public final class Configuration {
     /**
      * Function for coping new configuration file to the current app folder
      */
-    void copy_configuration() throws IOException{
-        try (FileWriter writer = new FileWriter("config.txt")) {
+    public void copy_configuration() throws IOException{
+        try (FileWriter writer = new FileWriter("config.entrconf")) {
             writer.write("ip%"+ip+"\n");
             writer.write("database%"+database+"\n");
             writer.write("databaseuser%"+databaseuser+"\n");
@@ -70,7 +70,7 @@ public final class Configuration {
     /**
      * Function for preparing main data for the object
      */
-    void run() throws FileNotFoundException, IOException{
+    public void run() throws FileNotFoundException, IOException{
         configuration_file = new File(file_src);
         
         if ( configuration_file.exists() && !configuration_file.isDirectory()){
@@ -100,7 +100,7 @@ public final class Configuration {
     /**
      * Function for showing raw file
      */
-    void show_file(){
+    public void show_file(){
         System.out.println("Showing raw file:");
         file_lines.forEach(line -> {
             System.out.println(line);
@@ -111,7 +111,7 @@ public final class Configuration {
      * Function for getting lines from file
      * @return ArrayList
      */
-    void get_lines() throws IOException{
+    public void get_lines() throws IOException{
         String line = file_reader.readLine();
         while( line!= null){
             file_lines.add(line);
@@ -123,14 +123,14 @@ public final class Configuration {
      * Function for validation data from file
      * @return boolean
      */
-    boolean validate(){
+    public boolean validate(){
         return file_lines.size() >= 4;
     }
     
     /**
      * Function for showing configuration
      */
-    void show_configuration(){
+    public void show_configuration(){
         System.out.println("ip: "+ip);
         System.out.println("database: "+database);
         System.out.println("database user: "+databaseuser);

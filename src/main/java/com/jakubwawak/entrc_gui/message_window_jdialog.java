@@ -22,6 +22,7 @@ public class message_window_jdialog extends javax.swing.JDialog {
         initComponents();
         this.setLocationRelativeTo(null);
         label_message.setText(message);
+        label_message.setEditable(false);
         setVisible(true);
     }
 
@@ -34,14 +35,13 @@ public class message_window_jdialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        label_message = new javax.swing.JLabel();
         button_ok = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        label_message = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        label_message.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        label_message.setText("Tekst wiadomosci");
+        setTitle("Informacja");
 
         button_ok.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         button_ok.setText("OK");
@@ -51,7 +51,11 @@ public class message_window_jdialog extends javax.swing.JDialog {
             }
         });
 
-        jLabel1.setText("by JW 2020");
+        jLabel1.setText("by JW 2021");
+
+        label_message.setColumns(20);
+        label_message.setRows(5);
+        jScrollPane1.setViewportView(label_message);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -60,21 +64,20 @@ public class message_window_jdialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(label_message, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 10, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(103, 103, 103)
                         .addComponent(button_ok, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel1)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(label_message, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(button_ok, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
@@ -95,6 +98,7 @@ public class message_window_jdialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton button_ok;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel label_message;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea label_message;
     // End of variables declaration//GEN-END:variables
 }

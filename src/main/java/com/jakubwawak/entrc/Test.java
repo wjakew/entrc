@@ -7,8 +7,13 @@ package com.jakubwawak.entrc;
 
 import com.jakubwawak.database.Database_Connector;
 import com.itextpdf.text.DocumentException;
+import com.jakubwawak.entrc_gui.welcome_message_2_window;
+import com.jakubwawak.entrc_gui.welcome_message_window;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.SocketException;
+import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -23,12 +28,10 @@ public class Test {
     
     
     // Constructor for the object
-    Test() throws SQLException, IOException, ClassNotFoundException, FileNotFoundException, DocumentException{
+    Test() throws SQLException, IOException, ClassNotFoundException, FileNotFoundException, DocumentException, UnknownHostException, SocketException, URISyntaxException{
         dc = new Database_Connector();        
-        dc.connect("localhost", "entrc_database", "root", "password");
         
-        RuntimeChecker rtc = new RuntimeChecker();
-        rtc.after_check(dc);
+        new welcome_message_2_window(dc,"test","130");
         
     }
     

@@ -22,7 +22,7 @@ public class RuntimeChecker {
     String current_macaddress;
     String LICENSE_KEY = "";
     
-    boolean validate_flag;
+    public boolean validate_flag;
     boolean directory_tree_flag;
     boolean first_run;
     public boolean license_load;
@@ -84,7 +84,7 @@ public class RuntimeChecker {
      * Function for running after run scenario
      * @param database 
      */
-    void after_check(Database_Connector database) throws UnknownHostException, SocketException, SQLException, FileNotFoundException{
+    public void after_check(Database_Connector database) throws UnknownHostException, SocketException, SQLException, FileNotFoundException{
         System.out.println("Running after check..");
         current_macaddress = database.get_local_MACAddress();
         load_license();
