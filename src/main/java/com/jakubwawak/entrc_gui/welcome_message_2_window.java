@@ -30,7 +30,7 @@ public class welcome_message_2_window extends javax.swing.JFrame {
      * Creates new form welcome_message_2_window
      */
     Database_Connector database;
-    String version;
+    String version,build_date;
     int database_version;
     Configuration config;
     String content;
@@ -44,9 +44,10 @@ public class welcome_message_2_window extends javax.swing.JFrame {
      * @throws FileNotFoundException
      * @throws URISyntaxException 
      */
-    public welcome_message_2_window(Database_Connector database,String version,String database_version) throws IOException, FileNotFoundException, URISyntaxException {
+    public welcome_message_2_window(Database_Connector database,String version,String database_version,String build_date) throws IOException, FileNotFoundException, URISyntaxException {
         this.database = database;
         this.version = version;
+        this.build_date = build_date;
         this.database_version = Integer.parseInt(database_version);
         config = new Configuration("config.entrconf");
         initComponents();
@@ -67,7 +68,7 @@ public class welcome_message_2_window extends javax.swing.JFrame {
                         "|_____|_| \\_| |_| |_| \\_\\\\____|";
         String addons = " VERSION: "+version + "   Jakub Wawak\n\n";
         addons = addons +"BUILD INFORMATION:\n";
-        addons = addons +"build date: 16.06.2021\n";
+        addons = addons +"build date: "+build_date+"\n";
         addons = addons +"machine local IP:"+get_IP_data()+"\n";
         button_changedata.setVisible(false);
         update_data(banner);

@@ -7,6 +7,7 @@ package com.jakubwawak.entrc;
 
 import com.jakubwawak.database.Database_Connector;
 import com.jakubwawak.entrc_gui.main_user_window;
+import com.formdev.flatlaf.FlatLightLaf;
 import com.itextpdf.text.DocumentException;
 import com.jakubwawak.database.Database_ProgramCodes;
 import com.jakubwawak.entrc_gui.main_user_ANC_window;
@@ -28,8 +29,9 @@ import java.util.Scanner;
  */
 public class Entrc {
     
-    final static String version = "v1.2.6";
+    final static String version = "v1.3.0";
     final static int databaseversion = 131;
+    final static String build_date = "08.11.2021";
     static Configuration run_configuration;
     static Database_Connector database;
     static Scanner user_handler;
@@ -37,6 +39,7 @@ public class Entrc {
     static int debug_window = 0;
     public static void main(String[] args) throws SQLException, IOException, FileNotFoundException, URISyntaxException, ClassNotFoundException, DocumentException{
         // debug mode
+        FlatLightLaf.setup();
         if (debug == 1){
             new Test();
             //System.exit(0);
@@ -49,7 +52,7 @@ public class Entrc {
             
             if ( args.length == 0){
                 System.out.println("No arguments - gui is starting...");
-                new welcome_message_2_window(database,version,Integer.toString(databaseversion));
+                new welcome_message_2_window(database,version,Integer.toString(databaseversion),build_date);
             }
             else{
                 if ( args.length == 1){
@@ -72,8 +75,8 @@ public class Entrc {
                                         if ( !rtc.license_load ){
                                             new message_window(null,true,"Błąd podczas odczytu licencji");
                                         }
-                                        new message_window(null,true,"Błędne sprawdzanie licencji programu. \nSkontaktuj się z administratorem. \nMAC: "+database.get_local_MACAddress()
-                                        +"\n licencja powinna być zapisana w pliku entrclient.license");
+                                        new message_window(null,true,"Błędne sprawdzanie licencji programu.\nSkontaktuj się z administratorem.\nMAC: "+database.get_local_MACAddress()
+                                        +"\nlicencja powinna być zapisana w pliku entrclient.license");
                                         System.exit(0);
                                     }
                                     //end of RuntimeChecker
@@ -203,7 +206,7 @@ public class Entrc {
                         "|_____|_| \\_| |_| |_| \\_\\\\____|";
         String addons = " VERSION: "+version + "   Jakub Wawak\n\n";
         addons = addons +"BUILD INFORMATION:\n";
-        addons = addons +"build date: 16.06.2021\n";
+        addons = addons +"build date: "+build_date+"\n";
         addons = addons +"machine local IP:"+get_IP_data()+"\n";
         System.out.println(banner);
         System.out.print(addons);

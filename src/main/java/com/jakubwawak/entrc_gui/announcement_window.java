@@ -28,7 +28,7 @@ public class announcement_window extends javax.swing.JDialog {
         this.database = database;
         this.setUndecorated(true);
         initComponents();
-        this.setLocationRelativeTo(parent);
+        this.setLocationRelativeTo(null);
         this.setBackground(Color.black);
         load_view();
         setVisible(true);

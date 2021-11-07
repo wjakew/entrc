@@ -771,6 +771,11 @@ public class Database_Connector {
      * @throws SQLException 
      */
     public boolean set_entrance_event(int worker_id,String photo_src) throws SQLException{
+        // no face in the picture
+        if ( photo_src.equals("NO FACE")){
+            log("No face on the webcam picture(worker_id: "+worker_id+")");
+            return false;
+        }
         log_ENTER(worker_id,photo_src);
         LocalDateTime entrance_time = LocalDateTime.now( ZoneId.of( "Europe/Warsaw" ) );
         String query =  "INSERT INTO ENTRANCE\n" +
@@ -910,6 +915,12 @@ public class Database_Connector {
      * -1 - database fail
      */
     public int set_exit_event(int worker_id,String photo_src) throws SQLException{
+        
+        // no face in the picture
+        if ( photo_src.equals("NO FACE")){
+            return -2;
+        }
+        
         log_EXIT(worker_id,photo_src);
         LocalDateTime exit_time = LocalDateTime.now( ZoneId.of( "Europe/Warsaw" ) );
         

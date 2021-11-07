@@ -24,6 +24,11 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfRect;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.objdetect.CascadeClassifier;
 
 /**
  *Object for creating user accept window
@@ -219,6 +224,9 @@ public final class user_accept_window extends javax.swing.JDialog {
                         case -1:
                             new message_window(null,true,"Błąd bazy danych. Skontaktuj się z administratorem");
                             break;
+                        case -2:
+                            new message_window(null,true,"Brak wykrycia twarzy.\nBrak możliwości zalogowania do systemu.");
+                            break;
                         default:
                             new message_window(null,true,"Wystąpił nierozpoznany błąd. Skontaktuj się z administratorem");
                             break;
@@ -295,7 +303,23 @@ public final class user_accept_window extends javax.swing.JDialog {
                             break;
                     }
                 }
-                
+                if ( dpc.get_value("LOCAL_FACE_DETECT").equals("YES")){
+                    database.log("LOCAL_FACE_DETECT = YES - trying to find faces on the photo");
+                    try{
+                        nu.pattern.OpenCV.loadShared();
+                        CascadeClassifier faceDetector = new CascadeClassifier();
+                        faceDetector.load("haarcascade_frontalface_alt.xml");
+                        Mat image = Imgcodecs.imread(photo_file.getAbsolutePath());
+                        MatOfRect faceDetections = new MatOfRect();
+                        faceDetector.detectMultiScale(image, faceDetections);
+                        if ( faceDetections.toArray().length == 0 ){
+                            return "NO FACE";
+                        }
+                    }catch(Exception e){
+                        new message_window_jdialog(this,true,"Face detection error:\n"+e.toString());
+                    }
+                    
+                }
                 return photo_file.getAbsolutePath();
             
             }catch(Exception e){
@@ -309,6 +333,8 @@ public final class user_accept_window extends javax.swing.JDialog {
             return "webcam is not supported on the machine";
         }
     }
+    
+    
     
     /**
      * Function for creating path name 

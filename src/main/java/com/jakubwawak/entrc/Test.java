@@ -31,7 +31,7 @@ public class Test {
     Test() throws SQLException, IOException, ClassNotFoundException, FileNotFoundException, DocumentException, UnknownHostException, SocketException, URISyntaxException{
         dc = new Database_Connector();        
         
-        new welcome_message_2_window(dc,"test","130");
+        //new welcome_message_2_window(dc,"test","130");
         
     }
     
