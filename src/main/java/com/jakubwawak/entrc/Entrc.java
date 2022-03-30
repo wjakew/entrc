@@ -29,9 +29,9 @@ import java.util.Scanner;
  */
 public class Entrc {
     
-    final static String version = "v1.3.0";
-    final static int databaseversion = 131;
-    final static String build_date = "08.11.2021";
+    final static String version = "v1.3.1";
+    final static int databaseversion = 133;
+    final static String build_date = "30.03.2022";
     static Configuration run_configuration;
     static Database_Connector database;
     static Scanner user_handler;
